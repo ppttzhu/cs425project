@@ -1,38 +1,14 @@
-<!DOCTYPE html>
-<html>
+---
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>cs425project</title>
-  <link rel="stylesheet" href="https://stackedit.io/style.css" />
-</head>
 
-<body class="stackedit">
-  <div class="stackedit__left">
-    <div class="stackedit__toc">
-      
-<ul>
-<li><a href="#cs425-project">CS425 Project</a>
-<ul>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#process">Process</a></li>
-<li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#steps">Steps</a></li>
-</ul>
-</li>
-</ul>
+---
 
-    </div>
-  </div>
-  <div class="stackedit__right">
-    <div class="stackedit__html">
-      <h1 id="cs425-project">CS425 Project</h1>
+<h1 id="cs425-project">CS425 Project</h1>
 <h2 id="overview">Overview</h2>
 <p>Design a database system with GUI</p>
 <h2 id="process">Process</h2>
 <!-- &#10;```mermaid&#10;graph BT &#10;A[Github Page: Host Website Page]-.Provide API.-&gt;B[AWS API Gateway: Host REST API]&#10;B-.Trigger Function.-&gt;C[&#34;AWS Lambda: (Java) Function Runner&#34;]&#10;C-.Fetch Data.-&gt;D[&#34;AWS RDS: Host (Postgres) Database&#34;]&#10;```&#10;-->
-<p><img src="https://mermaidjs.github.io/mermaid-live-editor/#/view/eyJjb2RlIjoiZ3JhcGggQlQgXG5BW0dpdGh1YiBQYWdlOiBIb3N0IFdlYnNpdGUgUGFnZV0tLlByb3ZpZGUgQVBJLi0-QltBV1MgQVBJIEdhdGV3YXk6IEhvc3QgUkVTVCBBUEldXG5CLS5UcmlnZ2VyIEZ1bmN0aW9uLi0-Q1tcIkFXUyBMYW1iZGE6IChKYXZhKSBGdW5jdGlvbiBSdW5uZXJcIl1cbkMtLkZldGNoIERhdGEuLT5EW1wiQVdTIFJEUzogSG9zdCAoUG9zdGdyZXMpIERhdGFiYXNlXCJdXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ" alt="Database Process"></p>
+<p><img src="https://github.com/ppttzhu/cs425project/blob/master/db%20process.jpg" alt="Image of DatabaseProcess"></p>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
 <li>Terminal</li>
@@ -62,8 +38,3 @@
 <li>Sync code to github and create github page to host it</li>
 </ol>
 
-    </div>
-  </div>
-</body>
-
-</html>
