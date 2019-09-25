@@ -1,9 +1,15 @@
----
+<!DOCTYPE html>
+<html>
 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cs425project</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
 
----
-
-<h1 id="cs425-project">CS425 Project</h1>
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="cs425-project">CS425 Project</h1>
 <h2 id="overview">Overview</h2>
 <p>Design a database system with GUI</p>
 <h2 id="process">Process</h2>
@@ -37,4 +43,7 @@
 </li>
 <li>Sync code to github and create github page to host it</li>
 </ol>
+</div>
+</body>
 
+</html>
