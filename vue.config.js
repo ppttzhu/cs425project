@@ -1,4 +1,6 @@
 module.exports = {
-  publicPath: "/cs425project",
-  outputDir: "docs"
+outputDir: "docs",
+publicPath: process.env.NODE_ENV === 'production'
+    ? '/cs425project/'
+    : '/'
 };
