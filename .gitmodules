@@ -1,0 +1,6 @@
+[submodule "cs425project_lambda"]
+	path = cs425project_lambda
+	url = git@github.com:ppttzhu/cs425project_lambda.git
+[submodule "cs425project_sql"]
+	path = cs425project_sql
+	url = git@github.com:ppttzhu/cs425project_sql.git
