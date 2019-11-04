@@ -18,3 +18,10 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Eclipse stuff
+target/
+bin/
+.classpath
+*.project
+.settings
