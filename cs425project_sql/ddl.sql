@@ -1,170 +1,176 @@
 -- ===========================Entities===========================
 CREATE TABLE region (
-    zip char(5),
-    city varchar(20),
-    state char(2),
+    zip CHAR(5),
+    city VARCHAR(50) NOT NULL,
+    state_id CHAR(2) NOT NULL,
     PRIMARY KEY (zip)
 );
 
 CREATE TABLE address (
-    aid int,
-    street varchar(100),
-    zip char(5),
+    aid SERIAL,
+    street VARCHAR(100) NOT NULL,
+    zip CHAR(5) NOT NULL,
     PRIMARY KEY (aid),
-    FOREIGN KEY (zip) REFERENCES region
+    FOREIGN KEY (zip) REFERENCES region ON DELETE CASCADE
 );
 
 CREATE TABLE manufacturer (
-    mid int,
-    name varchar(100),
-    phone_number varchar(20),
-    aid int,
+    mid SERIAL,
+    name VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(50),
+    aid INT,
     PRIMARY KEY (mid),
-    FOREIGN KEY (aid) REFERENCES address
+    FOREIGN KEY (aid) REFERENCES address ON DELETE SET NULL
 );
 
 CREATE TABLE warehouse (
-    wid int,
-    name varchar(100),
-    aid int,
+    wid SERIAL,
+    name VARCHAR(100) NOT NULL,
+    aid INT,
     PRIMARY KEY (wid),
-    FOREIGN KEY (aid) REFERENCES address
+    FOREIGN KEY (aid) REFERENCES address ON DELETE SET NULL
 );
 
 CREATE TABLE store (
-    sid int,
-    name varchar(100),
-    aid int,
+    sid SERIAL,
+    name VARCHAR(100) NOT NULL,
+    aid INT,
     PRIMARY KEY (sid),
-    FOREIGN KEY (aid) REFERENCES address
+    FOREIGN KEY (aid) REFERENCES address ON DELETE SET NULL
 );
 
 CREATE TABLE product (
-    pid int,
-    name varchar(100),
-    type varchar(20),
-    description text,
-    price money,
-    photo varchar(100),
-    mid int,
+    pid SERIAL,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(50),
+    description TEXT,
+    price MONEY NOT NULL CHECK (price::numeric > 0),
+    photo VARCHAR(100),
+    mid INT,
     PRIMARY KEY (pid),
-    FOREIGN KEY (mid) REFERENCES manufacturer
+    FOREIGN KEY (mid) REFERENCES manufacturer ON DELETE SET NULL
 );
 
 CREATE TABLE online_client (
-    cid int,
-    name varchar(100),
-    phone_number varchar(20),
-    email_address varchar(100),
-    aid int,
-    card_numbers varchar(20)[],
-    account_numbers varchar(20)[],
-    password_masked char(64),
+    cid SERIAL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(50) NOT NULL,
+    email_address VARCHAR(100) NOT NULL,
+    aid INT,
+    card_numbers VARCHAR(50)[],
+    account_numbers VARCHAR(50)[],
+    password_masked CHAR(64) NOT NULL,
     PRIMARY KEY (cid),
-    FOREIGN KEY (aid) REFERENCES address
+    FOREIGN KEY (aid) REFERENCES address ON DELETE SET NULL
 );
 
 CREATE TABLE store_client (
-    cid int,
-    name varchar(100) DEFAULT 'unknown',
-    PRIMARY KEY (cid)
+    cid INT,
+    online_cid INT,
+    PRIMARY KEY (cid),
+    FOREIGN KEY (online_cid) REFERENCES online_client ON DELETE SET NULL
 );
 
 -- ===========================Relationship===========================
 CREATE TABLE package (
-    pkgid int,
-    pid int,
+    pkgid INT,
+    pid INT,
     PRIMARY KEY (pkgid, pid),
-    FOREIGN KEY (pkgid) REFERENCES product,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (pkgid) REFERENCES product ON DELETE CASCADE,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE CASCADE
 );
 
 -- manufacturer to warehouse
 CREATE TABLE replenish_m2w (
-    rid int,
-    mid int,
-    wid int,
-    pid int,
-    amount int,
-    is_filled boolean,
-    date date,
+    rid SERIAL,
+    mid INT,
+    wid INT,
+    pid INT,
+    amount INT NOT NULL CHECK (amount > 0),
+    is_filled BOOLEAN NOT NULL DEFAULT FALSE,
+    date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
+        AND '2100-01-01'),
     PRIMARY KEY (rid),
-    FOREIGN KEY (mid) REFERENCES manufacturer,
-    FOREIGN KEY (wid) REFERENCES warehouse,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (mid) REFERENCES manufacturer ON DELETE SET NULL,
+    FOREIGN KEY (wid) REFERENCES warehouse ON DELETE SET NULL,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
 
 -- warehouse to store
 CREATE TABLE replenish_w2s (
-    rid int,
-    wid int,
-    sid int,
-    pid int,
-    amount int,
-    is_filled boolean,
-    date date,
+    rid SERIAL,
+    wid INT,
+    sid INT,
+    pid INT,
+    amount INT NOT NULL CHECK (amount > 0),
+    is_filled BOOLEAN NOT NULL DEFAULT FALSE,
+    date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
+        AND '2100-01-01'),
     PRIMARY KEY (rid),
-    FOREIGN KEY (wid) REFERENCES warehouse,
-    FOREIGN KEY (sid) REFERENCES store,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (wid) REFERENCES warehouse ON DELETE SET NULL,
+    FOREIGN KEY (sid) REFERENCES store ON DELETE SET NULL,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
 
 CREATE TABLE keep_warehouse (
-    wid int,
-    pid int,
-    amount int,
+    wid INT,
+    pid INT NOT NULL,
+    amount INT NOT NULL CHECK (amount >= 0),
     PRIMARY KEY (wid, pid),
-    FOREIGN KEY (wid) REFERENCES warehouse,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (wid) REFERENCES warehouse ON DELETE CASCADE,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE CASCADE
 );
 
 CREATE TABLE keep_store (
-    sid int,
-    pid int,
-    amount int,
+    sid INT,
+    pid INT NOT NULL,
+    amount INT NOT NULL CHECK (amount >= 0),
     PRIMARY KEY (sid, pid),
-    FOREIGN KEY (sid) REFERENCES store,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (sid) REFERENCES store ON DELETE CASCADE,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE CASCADE
 );
 
 CREATE TABLE order_online (
-    oid int,
-    cid int,
-    wid int,
-    pid int,
-    amount int,
-    discount float,
-    date date,
-    tracking_number varchar(20),
-    rating int,
-    review text,
+    oid SERIAL,
+    cid INT,
+    wid INT,
+    pid INT,
+    amount INT NOT NULL CHECK (amount > 0),
+    discount FLOAT NOT NULL DEFAULT 1.0,
+    date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
+        AND '2100-01-01'),
+    tracking_number VARCHAR(50),
+    rating INT,
+    review TEXT,
     PRIMARY KEY (oid),
-    FOREIGN KEY (cid) REFERENCES online_client,
-    FOREIGN KEY (wid) REFERENCES warehouse,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (cid) REFERENCES online_client ON DELETE SET NULL,
+    FOREIGN KEY (wid) REFERENCES warehouse ON DELETE SET NULL,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
 
 CREATE TABLE contract (
-    cid int,
-    pid int,
-    amount int,
-    bill_day int,
+    cid INT,
+    pid INT,
+    amount INT NOT NULL CHECK (amount > 0),
+    bill_day INT NOT NULL CHECK (bill_day BETWEEN 1 AND 28),
     PRIMARY KEY (cid, pid),
-    FOREIGN KEY (cid) REFERENCES online_client,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (cid) REFERENCES online_client ON DELETE SET NULL,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
 
 CREATE TABLE order_store (
-    oid int,
-    cid int,
-    sid int,
-    pid int,
-    amount int,
-    discount float,
-    date date,
+    oid SERIAL,
+    cid INT,
+    sid INT,
+    pid INT,
+    amount INT NOT NULL CHECK (amount > 0),
+    discount FLOAT NOT NULL DEFAULT 1.0,
+    date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
+        AND '2100-01-01'),
     PRIMARY KEY (oid),
-    FOREIGN KEY (cid) REFERENCES store_client,
-    FOREIGN KEY (sid) REFERENCES store,
-    FOREIGN KEY (pid) REFERENCES product
+    FOREIGN KEY (cid) REFERENCES store_client ON DELETE SET NULL,
+    FOREIGN KEY (sid) REFERENCES store ON DELETE SET NULL,
+    FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
 
