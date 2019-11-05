@@ -30901,6 +30901,7 @@ INSERT INTO region VALUES
 ('93727','Fresno','CA'),
 ('93728','Fresno','CA'),
 ('93730','Fresno','CA'),
+('93737','Fresno','CA'),
 ('93901','Salinas','CA'),
 ('93905','Salinas','CA'),
 ('93906','Salinas','CA'),
