@@ -72,11 +72,11 @@ CREATE TABLE store (
 
 CREATE TABLE product (
     pid SERIAL,
-    name VARCHAR(100) NOT NULL,
+    name TEXT NOT NULL,
     type VARCHAR(50),
     description TEXT,
     price MONEY NOT NULL CHECK (price::numeric > 0),
-    photo VARCHAR(100),
+    photo TEXT,
     mid INT,
     PRIMARY KEY (pid),
     FOREIGN KEY (mid) REFERENCES manufacturer ON DELETE SET NULL
