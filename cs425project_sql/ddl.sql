@@ -1,3 +1,34 @@
+-- ===========================Clear===========================
+DROP TABLE IF EXISTS order_store;
+
+DROP TABLE IF EXISTS contract;
+
+DROP TABLE IF EXISTS order_online;
+
+DROP TABLE IF EXISTS keep_store;
+
+DROP TABLE IF EXISTS keep_warehouse;
+
+DROP TABLE IF EXISTS replenish_w2s;
+
+DROP TABLE IF EXISTS replenish_m2w;
+
+DROP TABLE IF EXISTS package;
+
+DROP TABLE IF EXISTS online_client;
+
+DROP TABLE IF EXISTS product;
+
+DROP TABLE IF EXISTS store;
+
+DROP TABLE IF EXISTS warehouse;
+
+DROP TABLE IF EXISTS manufacturer;
+
+DROP TABLE IF EXISTS address;
+
+DROP TABLE IF EXISTS region;
+
 -- ===========================Entities===========================
 CREATE TABLE region (
     zip CHAR(5),
@@ -63,13 +94,6 @@ CREATE TABLE online_client (
     password_masked CHAR(64) NOT NULL,
     PRIMARY KEY (cid),
     FOREIGN KEY (aid) REFERENCES address ON DELETE SET NULL
-);
-
-CREATE TABLE store_client (
-    cid INT,
-    online_cid INT,
-    PRIMARY KEY (cid),
-    FOREIGN KEY (online_cid) REFERENCES online_client ON DELETE SET NULL
 );
 
 -- ===========================Relationship===========================
@@ -169,7 +193,7 @@ CREATE TABLE order_store (
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     PRIMARY KEY (oid),
-    FOREIGN KEY (cid) REFERENCES store_client ON DELETE SET NULL,
+    FOREIGN KEY (cid) REFERENCES online_client ON DELETE SET NULL,
     FOREIGN KEY (sid) REFERENCES store ON DELETE SET NULL,
     FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
