@@ -273,6 +273,14 @@ BEGIN
     SET amount = update_keep_warehouse.amount
     WHERE keep_warehouse.wid = update_keep_warehouse.wid
     AND keep_warehouse.pid = update_keep_warehouse.pid;
+
+    INSERT INTO keep_warehouse
+    SELECT update_keep_warehouse.wid, update_keep_warehouse.pid, update_keep_warehouse.amount
+    WHERE NOT EXISTS (
+        SELECT * FROM keep_warehouse
+        WHERE keep_warehouse.wid = update_keep_warehouse.wid
+        AND keep_warehouse.pid = update_keep_warehouse.pid
+    );
 END;
 $$ 
 LANGUAGE plpgsql;
@@ -284,10 +292,18 @@ CREATE OR REPLACE FUNCTION update_keep_store (
 ) RETURNS void AS 
 $$ 
 BEGIN 
-    UPDATE keep_warehouse
+    UPDATE keep_store
     SET amount = update_keep_store.amount
-    WHERE keep_warehouse.sid = update_keep_store.sid
-    AND keep_warehouse.pid = update_keep_store.pid;
+    WHERE keep_store.sid = update_keep_store.sid
+    AND keep_store.pid = update_keep_store.pid;
+
+    INSERT INTO keep_store
+    SELECT update_keep_store.sid, update_keep_store.pid, update_keep_store.amount
+    WHERE NOT EXISTS (
+        SELECT * FROM keep_store
+        WHERE keep_store.sid = update_keep_store.sid
+        AND keep_store.pid = update_keep_store.pid
+    );
 END;
 $$ 
 LANGUAGE plpgsql;

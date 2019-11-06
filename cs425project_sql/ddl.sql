@@ -1,4 +1,6 @@
 -- ===========================Clear===========================
+DROP VIEW IF EXISTS product_summary;
+
 DROP TABLE IF EXISTS order_store;
 
 DROP TABLE IF EXISTS contract;
@@ -174,7 +176,6 @@ CREATE TABLE order_online (
     wid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
-    discount FLOAT,
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     tracking_number VARCHAR(50),
@@ -202,7 +203,6 @@ CREATE TABLE order_store (
     sid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
-    discount FLOAT,
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     PRIMARY KEY (oid),
@@ -210,4 +210,32 @@ CREATE TABLE order_store (
     FOREIGN KEY (sid) REFERENCES store ON DELETE SET NULL,
     FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
+
+-- ===========================View===========================
+CREATE OR REPLACE VIEW product_summary AS
+    WITH ratings AS (
+        SELECT pid, avg(rating) as client_rating
+        FROM order_online
+        GROUP BY pid
+    ),
+    storage AS (
+        SELECT pid, sum(amount) as item_left
+        FROM keep_warehouse
+        GROUP BY pid
+    ),
+    image AS (
+        SELECT DISTINCT ON (pid) pid, image_url
+        FROM product_images
+    )
+    SELECT product.pid, name, price, image_url, client_rating, item_left
+    FROM (
+        product
+        LEFT OUTER JOIN ratings
+        ON product.pid = ratings.pid
+        LEFT OUTER JOIN storage
+        ON product.pid = storage.pid
+        LEFT OUTER JOIN image
+        ON product.pid = image.pid
+        )
+    ORDER BY product.pid;
 
