@@ -15,8 +15,6 @@ DROP TABLE IF EXISTS replenish_m2w;
 
 DROP TABLE IF EXISTS package;
 
-DROP TABLE IF EXISTS client_cards;
-
 DROP TABLE IF EXISTS online_client;
 
 DROP TABLE IF EXISTS product_images;
@@ -101,22 +99,16 @@ CREATE TABLE product_images (
 
 CREATE TABLE online_client (
     cid SERIAL,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(50) NOT NULL,
-    email_address VARCHAR(100) NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email_address VARCHAR(50) UNIQUE NOT NULL,
+    phone_number VARCHAR(50),
     aid INT,
+    card_number VARCHAR(50),
     account_number VARCHAR(50),
     password_masked CHAR(64) NOT NULL,
     PRIMARY KEY (cid),
     FOREIGN KEY (aid) REFERENCES address ON DELETE SET NULL
-);
-
-CREATE TABLE client_cards (
-    cid INT,
-    card_number VARCHAR(50) NOT NULL,
-    PRIMARY KEY (cid, card_number),
-    FOREIGN KEY (cid) REFERENCES online_client ON DELETE CASCADE
 );
 
 -- ===========================Relationship===========================
@@ -131,7 +123,6 @@ CREATE TABLE package (
 -- manufacturer to warehouse
 CREATE TABLE replenish_m2w (
     rid SERIAL,
-    mid INT,
     wid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
@@ -139,7 +130,6 @@ CREATE TABLE replenish_m2w (
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     PRIMARY KEY (rid),
-    FOREIGN KEY (mid) REFERENCES manufacturer ON DELETE SET NULL,
     FOREIGN KEY (wid) REFERENCES warehouse ON DELETE SET NULL,
     FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
 );
@@ -184,11 +174,11 @@ CREATE TABLE order_online (
     wid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
-    discount FLOAT NOT NULL DEFAULT 1.0,
+    discount FLOAT,
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     tracking_number VARCHAR(50),
-    rating INT,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
     review TEXT,
     PRIMARY KEY (oid),
     FOREIGN KEY (cid) REFERENCES online_client ON DELETE SET NULL,
@@ -200,7 +190,7 @@ CREATE TABLE contract (
     cid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
-    bill_day INT NOT NULL CHECK (bill_day BETWEEN 1 AND 28),
+    bill_day INT NOT NULL CHECK (bill_day BETWEEN 1 AND 31) DEFAULT 1,
     PRIMARY KEY (cid, pid),
     FOREIGN KEY (cid) REFERENCES online_client ON DELETE SET NULL,
     FOREIGN KEY (pid) REFERENCES product ON DELETE SET NULL
@@ -212,7 +202,7 @@ CREATE TABLE order_store (
     sid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
-    discount FLOAT NOT NULL DEFAULT 1.0,
+    discount FLOAT,
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     PRIMARY KEY (oid),
