@@ -15,7 +15,13 @@ DROP TABLE IF EXISTS replenish_m2w;
 
 DROP TABLE IF EXISTS package;
 
+DROP TABLE IF EXISTS client_cards;
+
 DROP TABLE IF EXISTS online_client;
+
+DROP TABLE IF EXISTS product_images;
+
+DROP TABLE IF EXISTS product_categories;
 
 DROP TABLE IF EXISTS product;
 
@@ -73,13 +79,24 @@ CREATE TABLE store (
 CREATE TABLE product (
     pid SERIAL,
     name TEXT NOT NULL,
-    type VARCHAR(50),
-    description TEXT,
     price MONEY NOT NULL CHECK (price::numeric > 0),
-    photo TEXT,
     mid INT,
     PRIMARY KEY (pid),
     FOREIGN KEY (mid) REFERENCES manufacturer ON DELETE SET NULL
+);
+
+CREATE TABLE product_categories (
+    pid INT,
+    category VARCHAR(50) NOT NULL,
+    PRIMARY KEY (pid, category),
+    FOREIGN KEY (pid) REFERENCES product ON DELETE CASCADE
+);
+
+CREATE TABLE product_images (
+    pid INT,
+    image_url TEXT NOT NULL,
+    PRIMARY KEY (pid, image_url),
+    FOREIGN KEY (pid) REFERENCES product ON DELETE CASCADE
 );
 
 CREATE TABLE online_client (
@@ -89,11 +106,17 @@ CREATE TABLE online_client (
     phone_number VARCHAR(50) NOT NULL,
     email_address VARCHAR(100) NOT NULL,
     aid INT,
-    card_numbers VARCHAR(50)[],
-    account_numbers VARCHAR(50)[],
+    account_number VARCHAR(50),
     password_masked CHAR(64) NOT NULL,
     PRIMARY KEY (cid),
     FOREIGN KEY (aid) REFERENCES address ON DELETE SET NULL
+);
+
+CREATE TABLE client_cards (
+    cid INT,
+    card_number VARCHAR(50) NOT NULL,
+    PRIMARY KEY (cid, card_number),
+    FOREIGN KEY (cid) REFERENCES online_client ON DELETE CASCADE
 );
 
 -- ===========================Relationship===========================
