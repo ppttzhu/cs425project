@@ -1,9 +1,8 @@
 # SQL to generate Database in AWS RDS 
 
 ## Usage:
-Step One: `sh make.sh`
-
-Step Two: `username`
+Run below command to build database: 
+`sh make.sh your-user-name your-database-name`
 
 ## ER-diagram
 ![ER-diagram](https://drive.google.com/uc?export=download&id=17CThGD3oY6RBSN-sIcu4k6zDZAJR8gD8)

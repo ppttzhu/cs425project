@@ -1,16 +1,17 @@
 #! /bin/sh
 
-# Step one: sh make.sh
-# Step two: Enter your user name
+# Run below command to build database: 
+# sh make.sh your-user-name your-database-name
 
 set -e
 set -u 
 
-read -p 'Username: ' uservar
 psql \
 	-X \
-	-U $uservar \
-	-d cs425\
-	-f ./ddl.sql\
-	-f ./insert.sql
-psql cs425
+	-U $1 \
+	-d $2 \
+	-f ./ddl.sql \
+	-f ./insert.sql \
+    -f ./function.sql \
+    -f ./test.sql \
+psql $1
