@@ -36713,3 +36713,18 @@ INSERT INTO product_images VALUES
 (350,'https://target.scene7.com/is/image/Target/14651356');
 
 -- TODO: INSERT INTO package
+INSERT INTO package VALUES
+(DEFAULT, 1, 11),
+(DEFAULT, 1, 12),
+(DEFAULT, 1, 26),
+(DEFAULT, 2, 3),
+(DEFAULT, 2, 7),
+(DEFAULT, 2, 33),
+(DEFAULT, 3, 5),
+(DEFAULT, 3, 6),
+(DEFAULT, 3, 35),
+(DEFAULT, 4, 1),
+(DEFAULT, 4, 48),
+(DEFAULT, 4, 43),
+(DEFAULT, 4, 17),
+(DEFAULT, 4, 47);
