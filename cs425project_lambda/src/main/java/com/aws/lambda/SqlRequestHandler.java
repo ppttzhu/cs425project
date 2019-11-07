@@ -25,7 +25,7 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
             // ===========================Insert===========================
             put("insert_online_client", Arrays.asList("char", "char", "char", "char"));
             put("insert_replenish_m2w", Arrays.asList("int", "int", "int", "date"));
-            put("insert_replenish_w2s", Arrays.asList("int", "int", "int", "date"));
+            put("insert_replenish_w2s", Arrays.asList("int", "int", "int", "int", "date"));
             put("insert_order_online", Arrays.asList("int", "int", "int", "int", "date", "char"));
             put("insert_order_store", Arrays.asList("int", "int", "int", "int", "date"));
             put("insert_contract", Arrays.asList("int", "int", "int", "int"));

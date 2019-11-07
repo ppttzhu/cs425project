@@ -36712,7 +36712,6 @@ INSERT INTO product_images VALUES
 (350,'http://s7d1.scene7.com/is/image/officedepot/678017_p_g230_red_straight'),
 (350,'https://target.scene7.com/is/image/Target/14651356');
 
--- TODO: INSERT INTO package
 INSERT INTO package VALUES
 (1, 11),
 (1, 12),
