@@ -2,23 +2,23 @@ package com.aws.lambda.data;
 
 public class RequestDetails {
 
-	private String id;
-	private String name;
+    private String func_name;
+    private String func_argument;
 
-	public String getId() {
-		return id;
-	}
+    public String getFunc_name() {
+        return func_name;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setFunc_name(String func_name) {
+        this.func_name = func_name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getFunc_argument() {
+        return func_argument;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setFunc_argument(String func_argument) {
+        this.func_argument = func_argument;
+    }
 
 }

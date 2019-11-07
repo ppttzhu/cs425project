@@ -2,32 +2,23 @@ package com.aws.lambda.data;
 
 public class ResponseDetails {
 
-	private String messageID;
-	private String messageReason;
-	private String returnValue;
+    private String message;
+    private String returnValue;
 
-	public String getMessageID() {
-		return messageID;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setMessageID(String messageID) {
-		this.messageID = messageID;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public String getMessageReason() {
-		return messageReason;
-	}
+    public String getReturnValue() {
+        return returnValue;
+    }
 
-	public void setMessageReason(String messageReason) {
-		this.messageReason = messageReason;
-	}
+    public void setReturnValue(String returnValue) {
+        this.returnValue = returnValue;
+    }
 
-	public String getReturnValue() {
-		return returnValue;
-	}
-
-	public void setReturnValue(String returnValue) {
-		this.returnValue = returnValue;
-	}
-	
 }

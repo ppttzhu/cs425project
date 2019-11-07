@@ -96,7 +96,6 @@ CREATE OR REPLACE FUNCTION insert_order_online (
     wid INT,
     pid INT,
     amount INT,
-    discount FLOAT,
     date DATE,
     tracking_number VARCHAR(50)
 ) RETURNS INT AS 
@@ -111,7 +110,6 @@ BEGIN
         wid,
         pid,
         amount,
-        discount,
         date,
         tracking_number,
         NULL,
@@ -127,7 +125,6 @@ CREATE OR REPLACE FUNCTION insert_order_store (
     sid INT,
     pid INT,
     amount INT,
-    discount FLOAT,
     date DATE
 ) RETURNS INT AS 
 $$ 
@@ -141,7 +138,6 @@ BEGIN
         sid,
         pid,
         amount,
-        discount,
         date
     ) RETURNING oid INTO ret;
     RETURN ret;
@@ -346,3 +342,14 @@ BEGIN
 END;
 $$ 
 LANGUAGE plpgsql;
+
+-- ===========================Query===========================
+CREATE OR REPLACE FUNCTION filter_by_category (
+    category VARCHAR(50) 
+) RETURNS TABLE(pid INT) AS 
+$$ 
+    SELECT pid
+    FROM product_categories
+    WHERE product_categories.category = filter_by_category.category;
+$$ 
+LANGUAGE SQL;
