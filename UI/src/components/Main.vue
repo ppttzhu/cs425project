@@ -8,19 +8,26 @@
       @jumpToPage="jumpToPage"
       @logout="logout"
     />
-    <ProductList v-if="currentPage === 'ProductList'" />
-    <Login
-      v-if="currentPage === 'Login'"
-      @jumpToPage="jumpToPage"
-      @clientLogin="clientLogin"
-      @message="handleMessage"
-    />
-    <Register
-      v-if="currentPage === 'Register'"
-      @jumpToPage="jumpToPage"
-      @clientLogin="clientLogin"
-      @message="handleMessage"
-    />
+    <div class="container mt-3">
+      <ProductList
+        v-if="currentPage === 'ProductList'"
+        :productList="productList"
+        @jumpToPage="jumpToPage"
+        @message="handleMessage"
+      />
+      <Login
+        v-if="currentPage === 'Login'"
+        @jumpToPage="jumpToPage"
+        @clientLogin="clientLogin"
+        @message="handleMessage"
+      />
+      <Register
+        v-if="currentPage === 'Register'"
+        @jumpToPage="jumpToPage"
+        @clientLogin="clientLogin"
+        @message="handleMessage"
+      />
+    </div>
   </div>
 </template>
 
@@ -55,7 +62,7 @@ export default {
     };
   },
   mounted() {
-    // this.getProductSummary();
+    this.getProductSummary();
   },
   methods: {
     handleMessage(message, level) {
@@ -103,10 +110,31 @@ export default {
           }
         })
         .then(r => {
-          _this.message = r.data.message;
-          _this.productList = r.data.returnValue;
+          if (r.data.message === "Success") {
+            // console.log(r.data.returnValue);
+            _this.productList = _this.processProductList(r.data.returnValue);
+          } else {
+            _this.message = r.data.message;
+          }
         })
         .catch(e => (_this.message = e));
+    },
+    processProductList(pstring) {
+      var plist = pstring.split("\n");
+      var columns = plist[0].split("|");
+      var ret = [];
+      for (var i = 1; i < plist.length; i++) {
+        if (plist[i] && plist[i] !== "") {
+          var onep = {};
+          var onepstring = plist[i].split("|");
+          for (var j = 0; j < columns.length; j++) {
+            onep[columns[j]] = onepstring[j];
+          }
+          onep["item_left"] = 1;
+          ret.push(onep);
+        }
+      }
+      return ret;
     }
   },
   computed: {
