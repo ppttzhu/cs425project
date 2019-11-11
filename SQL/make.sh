@@ -13,5 +13,6 @@ psql \
 	-f ./ddl.sql \
 	-f ./insert.sql \
     -f ./function.sql \
-    -f ./test.sql \
-psql $1
+    -f ./test.sql 
+
+psql -U $1 -d $2
