@@ -346,10 +346,51 @@ LANGUAGE plpgsql;
 -- ===========================Query===========================
 CREATE OR REPLACE FUNCTION filter_by_category (
     category VARCHAR(50) 
-) RETURNS TABLE(pid INT) AS 
+) RETURNS TABLE (pid INT) AS 
 $$ 
     SELECT pid
     FROM product_categories
     WHERE product_categories.category = filter_by_category.category;
+$$ 
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION select_online_client (
+    email_address VARCHAR(50)
+) RETURNS TABLE (
+    cid INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email_address VARCHAR(50),
+    phone_number VARCHAR(50),
+    street VARCHAR(100),
+    zip CHAR(5),
+    city VARCHAR(50),
+    state_id CHAR(2),
+    card_number VARCHAR(50),
+    account_number VARCHAR(50),
+    password_masked CHAR(64)
+) AS 
+$$ 
+    WITH client AS (
+        SELECT *
+        FROM online_client 
+        WHERE online_client.email_address = select_online_client.email_address
+    )
+    SELECT client.cid,
+        client.first_name,
+        client.last_name,
+        client.email_address,
+        client.phone_number,
+        address.street,
+        address.zip,
+        region.city,
+        region.state_id,
+        client.card_number,
+        client.account_number,
+        client.password_masked
+    FROM client LEFT OUTER JOIN address
+        ON client.aid = address.aid
+        LEFT OUTER JOIN region
+        ON address.zip = region.zip;
 $$ 
 LANGUAGE SQL;

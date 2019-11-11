@@ -43,6 +43,7 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
             put("region", new ArrayList<String>());
             put("filter_by_category", Arrays.asList("char"));
             put("product_summary", new ArrayList<String>());
+            put("select_online_client", Arrays.asList("char"));
         }
     };
 
