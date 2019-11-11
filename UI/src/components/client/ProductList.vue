@@ -1,14 +1,28 @@
 <template>
   <div id="product-list">
     <h1>CS425Project</h1>
+    <ProductItem :item="item" />
   </div>
 </template>
 
 <script>
+import ProductItem from "../ProductItem.vue";
+
 export default {
-  name: "ProductList",
+  components: {
+    ProductItem
+  },
   data() {
     return {
+      item: {
+        pid: "d",
+        name: "d",
+        price: "d",
+        image_url:
+          "https://www.pdfonline.com/corporate/newsletters/images/jpgtopdf.png",
+        client_rating: "d",
+        item_left: "d"
+      },
       currentPage: "ProductList"
     };
   }

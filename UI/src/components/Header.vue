@@ -1,8 +1,11 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark" role="navigation">
     <div class="container">
+      <ul class="nav navbar-nav">
+        <a class="nav-link" @click="jumpToPage('Home')">Home</a>
+      </ul>
+
       <!-- Brand and toggle get grouped for better mobile display -->
-      <router-link to="/" class="navbar-brand mr-auto">Online Store</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -19,43 +22,21 @@
       <div class="collapse navbar-collapse" id="navbarTop" :class="{show: isNavOpen}">
         <ul class="navbar-nav mr-auto"></ul>
         <ul class="nav navbar-nav">
-          <router-link
-            to="/login"
-            tag="li"
-            v-if="!isLoggedIn"
-            class="nav-item"
-            active-class="active"
-          >
-            <a class="nav-link">Login</a>
-          </router-link>
-          <li v-if="isLoggedIn" class="li-pointer nav-item">
-            <a @click="logout" class="nav-link">Logout {{ userEmail }}</a>
-          </li>
-          <router-link
-            to="/register"
-            tag="li"
-            v-if="!isLoggedIn"
-            class="nav-item"
-            active-class="active"
-          >
-            <a class="nav-link">Register</a>
-          </router-link>
-          <li>
-            <router-link to="/cart" class="btn btn-success navbar-btn" tag="button">
-              Checkout
-              <span class="badge badge-light">{{ numItems }} ($ {{ cartValue }})</span>
-            </router-link>
-          </li>
+          <a v-if="firstName === null" class="nav-link" @click="jumpToPage('Login')">Login</a>
+          <a v-else class="nav-link" @click="logout">Logout {{ firstName }}</a>
+          <button class="btn btn-success navbar-btn">
+            Checkout
+            <span class="badge badge-light">{{ numItems }} ($ {{ cartValue }})</span>
+          </button>
         </ul>
       </div>
     </div>
-    <!-- /.container -->
   </nav>
 </template>
 
 <script>
 export default {
-  name: "Header",
+  props: ["firstName", "numItems", "cartValue"],
   data() {
     return {
       isNavOpen: false,
@@ -65,14 +46,12 @@ export default {
   methods: {
     toggleNavbar() {
       this.isNavOpen = !this.isNavOpen;
-    }
-  },
-  computed: {
-    numItems() {
-      return 1;
     },
-    cartValue() {
-      return 1;
+    jumpToPage(page) {
+      this.$emit("jumpToPage", page);
+    },
+    logout() {
+      this.$emit("logout");
     }
   }
 };

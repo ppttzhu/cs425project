@@ -4,47 +4,59 @@
       <form id="register-form" role="form">
         <h3 class="text-center">Register</h3>
         <div class="form-group">
-          <input
+          <b-form-input
             type="email"
             name="email"
             id="email"
             class="form-control"
             placeholder="Email Address"
-            value
             v-model="email"
-          />
+            :state="checkEmail"
+          ></b-form-input>
         </div>
         <div class="form-group">
-          <input
+          <b-form-input
+            type="text"
+            name="first-name"
+            id="first-name"
+            class="form-control"
+            placeholder="First Name"
+            v-model="firstName"
+            :state="checkFirst"
+          ></b-form-input>
+        </div>
+        <div class="form-group">
+          <b-form-input
+            type="text"
+            name="last-name"
+            id="last-name"
+            class="form-control"
+            placeholder="Last Name"
+            v-model="lastName"
+            :state="checkLast"
+          ></b-form-input>
+        </div>
+        <div class="form-group">
+          <b-form-input
             type="password"
             name="password"
             id="password"
             class="form-control"
-            placeholder="Password"
+            placeholder="Password at least 6 characters"
             v-model="password"
-          />
+            :state="checkPassword"
+          ></b-form-input>
         </div>
         <div class="form-group">
           <button
             class="btn btn-success"
             style="width: 100%"
-            @click.prevent="registerByEmailLocal"
+            @click.prevent="insertOnlineClient"
             :disabled="isLoading"
           >
-            <i v-if="isLoading" class="fa fa-spinner fa-spin" />
             Register
+            <b-spinner v-if="isLoading" small></b-spinner>
           </button>
-        </div>
-        <div class="form-group">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="text-center">
-                <router-link to="/login">
-                  <a>Login</a>
-                </router-link>
-              </div>
-            </div>
-          </div>
         </div>
       </form>
     </div>
@@ -52,38 +64,126 @@
 </template>
 
 <script>
+import axios from "axios";
+import { BFormInput, BSpinner } from "bootstrap-vue";
+import { sha256 } from "js-sha256";
+
 export default {
+  components: {
+    "b-form-input": BFormInput,
+    "b-spinner": BSpinner
+  },
   data() {
     return {
       email: "",
+      firstName: "",
+      lastName: "",
       password: "",
-      isLoading: false
+      isLoading: false,
+      isChecking: false
     };
   },
   methods: {
-    registerByEmailLocal() {
+    checkInformation() {
+      this.isChecking = true;
+      var msg = "";
+      if (!this.checkEmail) {
+        msg += "Email Address not valid. ";
+      }
+      if (!this.checkFirst) {
+        msg += "First Name not empty. ";
+      }
+      if (!this.checkLast) {
+        msg += "Last Name not empty. ";
+      }
+      if (!this.checkPassword) {
+        msg += "Password at least 6 characters. ";
+      }
+      if (msg !== "") {
+        this.$emit("message", msg, "danger");
+        return false;
+      }
+      return true;
+    },
+    jumpToPage(page) {
+      this.$emit("jumpToPage", page);
+    },
+    insertOnlineClient() {
+      var isValid = this.checkInformation();
+      if (!isValid) {
+        return;
+      }
       this.isLoading = true;
-      let data = {
-        email: this.email,
-        password: this.password
+      var _this = this;
+      var request = {
+        func_name: "insert_online_client",
+        func_argument:
+          this.firstName +
+          "|" +
+          this.lastName +
+          "|" +
+          this.email +
+          "|" +
+          sha256(this.password)
       };
-      this.registerByEmail(data)
-        .then(() => {
-          this.clearMessage();
-          this.$router.push({ name: "mainpage" });
+      console.log(JSON.stringify(request));
+      axios
+        .post("", JSON.stringify(request), {
+          headers: {
+            "Content-Type": "application/json"
+          }
         })
-        .catch(error => {
-          // console.log('register error', error);
-          let message_obj = {
-            message: error.message,
-            messageClass: "danger",
-            autoClose: true
-          };
-          this.addMessage(message_obj);
-        })
-        .then(() => {
-          this.isLoading = false;
+        .catch(e => _this.$emit("message", e, "danger"))
+        .then(r => {
+          console.log(r.data);
+          if (
+            r.data.message &&
+            r.data.message.includes(
+              "duplicate key value violates unique constraint"
+            )
+          ) {
+            _this.$emit(
+              "message",
+              "This Email address has been registered. Please log in.",
+              "danger"
+            );
+          } else {
+            _this.$emit("message", r.data.message, "danger");
+          }
+          if (r.data.returnValue && r.data.returnValue !== "") {
+            var client = {
+              cid: r.data.returnValue.split("\n")[1],
+              firstName: _this.firstName,
+              lastName: _this.lastName,
+              email: _this.email,
+              phoneNumber: null,
+              street: null,
+              zip: null,
+              city: null,
+              state: null,
+              cardNumber: null,
+              accountNumber: null,
+              password: _this.password
+            };
+            _this.$emit("clientLogin", client);
+            _this.jumpToPage("Previous");
+          }
+          _this.isLoading = false;
         });
+    }
+  },
+  computed: {
+    checkEmail() {
+      return this.isChecking ? this.email.includes("@") : null;
+    },
+    checkFirst() {
+      return this.isChecking ? this.firstName !== "" : null;
+    },
+    checkLast() {
+      return this.isChecking ? this.lastName !== "" : null;
+    },
+    checkPassword() {
+      return this.isChecking ? this.password.length >= 6 : null;
     }
   }
 };
