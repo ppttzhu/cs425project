@@ -38,3 +38,23 @@ SELECT insert_online_client('Brittany','Padilla','sanchezjessica@yahoo.com','MY-
 SELECT insert_online_client('Sarah','Zamora','qjohnson@yahoo.com','MY-MASKED-PASSWORD');
 SELECT insert_online_client('Kathy','Mendez','davidmatthews@bailey-gordon.com','MY-MASKED-PASSWORD');
 --=====================Update Fake Pay=====================
+SELECT update_online_client_pay(2,'075-361-1225x57681','4167460543864','5534500682702280','623 James Shoals','95945');
+SELECT update_online_client_pay(3,'(630)138-6073','3589431294836200','501832415316','0833 Jones Knolls','06040');
+SELECT update_online_client_pay(4,'(074)743-9116x2271','4453192068598','585846591147','82195 Elizabeth Extensions','40206');
+SELECT update_online_client_pay(5,'9128037168','4305028419001347','3515035906949373','6836 Deanna Square Apt. 817','05452');
+SELECT update_online_client_pay(6,'397-959-4112','4083316259822009281','4783517282015070','95122 Hansen Port','94591');
+SELECT update_online_client_pay(7,'045.203.1364x8539','5163990960670044','5311777174574448','312 Jennifer Mission Suite 737','85306');
+SELECT update_online_client_pay(8,'058.853.9257','5176522106797061','4463750386784419','348 Rice Roads Apt. 007','37209');
+SELECT update_online_client_pay(9,'(495)088-1236x84751','502084647432','675992159292','629 Jasmine Creek Apt. 646','85305');
+SELECT update_online_client_pay(10,'+1-944-386-4603x640','588755003203','180006846678323','009 Reyes Rest','40208');
+SELECT update_online_client_pay(11,'706.903.0028','6583485158588454','3569929992223799','71064 Matthew Curve Suite 168','80003');
+SELECT update_online_client_pay(12,'001-057-110-9783x947','180089145226135','3534242069165907','75831 Kaitlyn Roads Suite 719','05037');
+SELECT update_online_client_pay(13,'5824506304','4665087542791677506','4068663625095387598','677 Judith Mills','06040');
+SELECT update_online_client_pay(14,'341.413.9756','5254321234088914','4739527103946798365','35747 Davis Ways','02664');
+SELECT update_online_client_pay(15,'001-484-553-5126','4837500152351','676186637820','974 Sarah Station','37206');
+SELECT update_online_client_pay(16,'001-894-359-8215x8227','3528903040903637','4497386536852','42117 Dale Lakes Apt. 254','72704');
+SELECT update_online_client_pay(17,'328-959-0990','3519591666484114','4171099358504','44999 Schwartz Valley Apt. 215','36108');
+SELECT update_online_client_pay(18,'+1-770-085-4401x21702','060463413843','3588404175506490','826 Davis Haven','37076');
+SELECT update_online_client_pay(19,'601-665-2252','3569914769870758','6528964128081327','1604 Smith Square','93908');
+SELECT update_online_client_pay(20,'001-846-091-7841','4181272686215839','2224028081672963','5498 Jennifer Stravenue Suite 192','72704');
+SELECT update_online_client_pay(21,'001-263-487-3455x749','30556307110820','060458180597','976 Gina Plain Suite 575','72703');
