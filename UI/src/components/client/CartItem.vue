@@ -10,26 +10,16 @@
         </div>
       </div>
     </td>
-    <td data-th="Price">${{ cartItem.price }}</td>
+    <td data-th="Price" class="text-center">${{ cartItem.price }}</td>
     <td data-th="Amount">
-      <!-- <input
+      <b-form-input
         type="number"
-        class="form-control text-center"
-        :value="cartItem.amount"
-        @input="updateAmount"
+        :number="true"
+        v-model="amount"
+        @change="amountChanged"
         min="0"
-      />-->
-      <div class="additem">
-        <b-input-group class="pull-right">
-          <b-input-group-prepend>
-            <b-button variant="success" @click="deleteItem">-</b-button>
-          </b-input-group-prepend>
-          <b-form-input type="text" :number="true" v-model="amount" @change="amountChanged"></b-form-input>
-          <b-input-group-append>
-            <b-button variant="success" @click="addItem">+</b-button>
-          </b-input-group-append>
-        </b-input-group>
-      </div>
+        max="9999"
+      ></b-form-input>
     </td>
     <td data-th="Subtotal" class="text-center">${{ subtotal.toFixed(2) }}</td>
     <td class="actions" data-th>
@@ -42,20 +32,10 @@
 
 <script>
 import { mapActions } from "vuex";
-import {
-  BInputGroup,
-  BInputGroupAppend,
-  BInputGroupPrepend,
-  BButton,
-  BFormInput
-} from "bootstrap-vue";
+import { BFormInput } from "bootstrap-vue";
 export default {
   props: ["cartItem"],
   components: {
-    "b-input-group": BInputGroup,
-    "b-input-group-append": BInputGroupAppend,
-    "b-input-group-prepend": BInputGroupPrepend,
-    "b-button": BButton,
     "b-form-input": BFormInput
   },
   data() {
@@ -67,23 +47,8 @@ export default {
     ...mapActions(["addToChart"]),
     amountChanged() {
       this.cartItem.amount = this.amount;
+      console.log(this.amount);
       this.addToChart(this.cartItem);
-    },
-    addItem() {
-      if (this.amount >= 9999) {
-        this.amount = 9999;
-      } else {
-        this.amount += 1;
-      }
-      this.amountChanged();
-    },
-    deleteItem() {
-      if (this.amount <= 0) {
-        this.amount = 0;
-      } else {
-        this.amount -= 1;
-      }
-      this.amountChanged();
     },
     removeItem() {
       this.amount = 0;

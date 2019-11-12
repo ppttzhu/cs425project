@@ -4,10 +4,10 @@
       <thead>
         <tr>
           <th style="width:50%">Product</th>
-          <th style="width:10%">Price</th>
-          <th style="width:12%">Amount</th>
+          <th style="width:15%" class="text-center">Price</th>
+          <th style="width:12%" class="text-center" :style="'min-width:80px'">Amount</th>
           <th style="width:20%" class="text-center">Subtotal</th>
-          <th style="width:8%"></th>
+          <th style="width:3%"></th>
         </tr>
       </thead>
 
@@ -29,7 +29,7 @@
           </td>
           <td colspan="2" class="d-none d-sm-table-cell"></td>
           <td class="d-none d-sm-table-cell text-center">
-            <strong>Total ${{ cartValue }}</strong>
+            <strong>Total ${{ cartValue.toFixed(2) }}</strong>
           </td>
           <td class="px-0">
             <button class="btn btn-success" @click="checkout">
