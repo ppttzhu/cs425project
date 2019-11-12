@@ -10,14 +10,18 @@
         </h5>
         <h6 class="card-subtitle mb-2 remain">{{ item.item_left }} left in stock</h6>
         <div class="row">
-          <p class="col-6 lead">${{ item.price }}</p>
-          <p class="col-6">
-            <button
-              class="btn btn-success pull-right"
-              :disabled="item.item_left === 0"
-              @click="addItem"
-            >Add to cart</button>
-          </p>
+          <div class="col-9 lead">${{ item.price }}</div>
+          <div class="additem">
+            <b-input-group class="pull-right">
+              <b-input-group-prepend>
+                <b-button variant="success" @click="removeItem">-</b-button>
+              </b-input-group-prepend>
+              <b-form-input type="text" :number="true" v-model="amount" @change="amountChanged"></b-form-input>
+              <b-input-group-append>
+                <b-button variant="success" @click="addItem">+</b-button>
+              </b-input-group-append>
+            </b-input-group>
+          </div>
         </div>
       </div>
     </div>
@@ -25,49 +29,73 @@
 </template>
 
 <script>
+import {
+  BInputGroup,
+  BInputGroupAppend,
+  BInputGroupPrepend,
+  BButton,
+  BFormInput
+} from "bootstrap-vue";
 export default {
   props: ["item"],
-  methods: {
-    addItem() {},
-    jumpToPage(page) {}
+  data() {
+    return {
+      amount: 0
+    };
   },
-  filters: {
-    shortDescription(value) {
-      if (value && value.length > 100) {
-        return value.substring(0, 100) + "...";
+  components: {
+    "b-input-group": BInputGroup,
+    "b-input-group-append": BInputGroupAppend,
+    "b-input-group-prepend": BInputGroupPrepend,
+    "b-button": BButton,
+    "b-form-input": BFormInput
+  },
+  methods: {
+    amountChanged() {
+      this.$emit("amountChanged", this.item, this.amount);
+    },
+    addItem() {
+      if (this.amount >= 9999) {
+        this.amount = 9999;
       } else {
-        return value;
+        this.amount += 1;
       }
-    }
+      this.amountChanged();
+    },
+    removeItem() {
+      if (this.amount <= 0) {
+        this.amount = 0;
+      } else {
+        this.amount -= 1;
+      }
+      this.amountChanged();
+    },
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.additem {
+  width: 130px;
+}
 .pull-right {
   float: right;
 }
-
 div.card {
   height: 100%;
 }
-
 .card-text {
   font-size: 0.875rem;
 }
-
 .remain {
   color: #d17581;
 }
-
 .grow {
   transition: all 0.2s ease-in-out;
 }
-
 .grow:hover {
   transform: scale(1.1);
 }
-
 .list-group-item {
   float: none;
   width: 100%;
@@ -89,17 +117,14 @@ div.card {
     margin: 0;
     height: auto;
   }
-
   .thumbnail-image {
     position: static;
   }
-
   .card-body {
     float: left;
     width: 80%;
     margin: 0;
   }
-
   @media (max-width: 767.98px) {
     .img-event {
       width: 30%;
@@ -107,7 +132,6 @@ div.card {
       padding: 0 !important;
       margin: 0;
     }
-
     .card-body {
       float: left;
       width: 70%;
@@ -115,13 +139,11 @@ div.card {
     }
   }
 }
-
 .item.list-group-item:before,
 .item.list-group-item:after {
   display: table;
   content: " ";
 }
-
 .item.list-group-item:after {
   clear: both;
 }

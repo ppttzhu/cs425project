@@ -67,6 +67,7 @@
 import axios from "axios";
 import { BFormInput, BSpinner } from "bootstrap-vue";
 import { sha256 } from "js-sha256";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -84,6 +85,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["addMessage", "setCurrentUser"]),
     checkInformation() {
       this.isChecking = true;
       var msg = "";
@@ -100,13 +102,13 @@ export default {
         msg += "Password at least 6 characters. ";
       }
       if (msg !== "") {
-        this.$emit("message", msg, "danger");
+        this.addMessage({
+          level: "danger",
+          message: msg
+        });
         return false;
       }
       return true;
-    },
-    jumpToPage(page) {
-      this.$emit("jumpToPage", page);
     },
     insertOnlineClient() {
       var isValid = this.checkInformation();
@@ -133,7 +135,12 @@ export default {
             "Content-Type": "application/json"
           }
         })
-        .catch(e => _this.$emit("message", e, "danger"))
+        .catch(e => {
+          _this.addMessage({
+            level: "danger",
+            message: e
+          });
+        })
         .then(r => {
           console.log(r.data);
           if (
@@ -142,15 +149,11 @@ export default {
               "duplicate key value violates unique constraint"
             )
           ) {
-            _this.$emit(
-              "message",
-              "This Email address has been registered. Please log in.",
-              "danger"
-            );
-          } else {
-            _this.$emit("message", r.data.message, "danger");
-          }
-          if (r.data.returnValue && r.data.returnValue !== "") {
+            _this.addMessage({
+              level: "danger",
+              message: "This Email address has been registered. Please log in."
+            });
+          } else if (r.data.returnValue && r.data.returnValue !== "") {
             var client = {
               cid: r.data.returnValue.split("\n")[1],
               firstName: _this.firstName,
@@ -165,8 +168,19 @@ export default {
               accountNumber: null,
               password: _this.password
             };
-            _this.$emit("clientLogin", client);
-            _this.jumpToPage("Previous");
+            _this.setCurrentUser(client);
+            _this.$router.push({
+              name: "ProductList"
+            });
+            _this.addMessage({
+              level: "success",
+              message: "Successfully registered."
+            });
+          } else {
+            _this.addMessage({
+              level: "danger",
+              message: r.data.message
+            });
           }
           _this.isLoading = false;
         });

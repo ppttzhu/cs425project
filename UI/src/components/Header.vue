@@ -2,9 +2,8 @@
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark" role="navigation">
     <div class="container">
       <ul class="nav navbar-nav">
-        <a class="nav-link" @click="jumpToPage('Home')">Home</a>
+        <router-link to="/" class="navbar-brand mr-auto">Online Store</router-link>
       </ul>
-
       <!-- Brand and toggle get grouped for better mobile display -->
       <button
         class="navbar-toggler"
@@ -22,12 +21,21 @@
       <div class="collapse navbar-collapse" id="navbarTop" :class="{show: isNavOpen}">
         <ul class="navbar-nav mr-auto"></ul>
         <ul class="nav navbar-nav">
-          <a v-if="firstName === null" class="nav-link" @click="jumpToPage('Login')">Login</a>
-          <a v-else class="nav-link" @click="logout">Logout {{ firstName }}</a>
-          <button class="btn btn-success navbar-btn">
-            Checkout
-            <span class="badge badge-light">{{ numItems }} ($ {{ cartValue }})</span>
-          </button>
+          <router-link to="/login" v-if="currentUser === null && !isAdmin" class="nav-item">
+            <a class="nav-link">Login</a>
+          </router-link>
+          <li v-if="currentUser !== null" class="li-pointer nav-item">
+            <a @click="logoutUser" class="nav-link">Logout {{ currentUser.firstName }}</a>
+          </li>
+          <li v-if="isAdmin" class="li-pointer nav-item">
+            <a @click="logoutAdmin" class="nav-link">Logout admin</a>
+          </li>
+          <li>
+            <router-link to="/shoppingcart" class="btn btn-success navbar-btn" tag="button">
+              Checkout
+              <span class="badge badge-light">{{ numItems }} ($ {{ cartValue.toFixed(2) }})</span>
+            </router-link>
+          </li>
         </ul>
       </div>
     </div>
@@ -35,8 +43,9 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
-  props: ["firstName", "numItems", "cartValue"],
   data() {
     return {
       isNavOpen: false,
@@ -44,15 +53,25 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["removeCurrentUser", "setAdmin"]),
     toggleNavbar() {
       this.isNavOpen = !this.isNavOpen;
     },
-    jumpToPage(page) {
-      this.$emit("jumpToPage", page);
+    logoutUser() {
+      this.removeCurrentUser();
+      this.$router.push({
+        name: "ProductList"
+      });
     },
-    logout() {
-      this.$emit("logout");
+    logoutAdmin() {
+      this.setAdmin(false);
+      this.$router.push({
+        name: "ProductList"
+      });
     }
+  },
+  computed: {
+    ...mapGetters(["currentUser", "isAdmin", "numItems", "cartValue"])
   }
 };
 </script>

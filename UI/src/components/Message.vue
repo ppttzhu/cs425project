@@ -4,24 +4,26 @@
       <button type="button" class="close" aria-label="Close" @click="closeMessageBar">
         <span aria-hidden="true">&times;</span>
       </button>
-      <div>{{ this.message ? this.message : "Unknown Error."}}</div>
+      <div>{{ this.messageGroup.message }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  props: ["level", "message"],
   data() {
     return {
       showMessageBar: false
     };
   },
   computed: {
+    ...mapGetters(["messageGroup"]),
     levelStyle() {
       return (
         "col-12 panel panel-" +
-        this.level +
+        this.messageGroup.level +
         " " +
         (this.showMessageBar ? "" : "hidden")
       );
@@ -33,8 +35,8 @@ export default {
     }
   },
   watch: {
-    message: function() {
-      this.showMessageBar = this.message !== "";
+    messageGroup: function() {
+      this.showMessageBar = !(this.messageGroup.message === "");
     }
   }
 };
@@ -49,13 +51,6 @@ export default {
   min-height: 50px;
   z-index: 9999;
   margin-left: -25%;
-}
-
-.message-bar .close-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: #fff;
 }
 
 .message-bar .panel {

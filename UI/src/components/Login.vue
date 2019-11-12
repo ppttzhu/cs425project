@@ -41,7 +41,9 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="text-center">
-                <a href="#" @click.prevent="jumpToPage('Register')">New user? Register</a>
+                <router-link to="/register">
+                  <a>New user? Register</a>
+                </router-link>
               </div>
             </div>
           </div>
@@ -55,6 +57,7 @@
 import axios from "axios";
 import { BSpinner } from "bootstrap-vue";
 import { sha256 } from "js-sha256";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -68,9 +71,7 @@ export default {
     };
   },
   methods: {
-    jumpToPage(page) {
-      this.$emit("jumpToPage", page);
-    },
+    ...mapActions(["addMessage", "setCurrentUser", "setAdmin"]),
     login() {
       this.isLoading = true;
       var _this = this;
@@ -78,6 +79,13 @@ export default {
         func_name: "select_online_client",
         func_argument: this.email
       };
+      if (this.email === "admin" && this.password === "admin") {
+        this.setAdmin(true);
+        this.$router.push({
+          name: "Statistics"
+        });
+        return;
+      }
       console.log(request);
       axios
         .post("", JSON.stringify(request), {
@@ -85,7 +93,12 @@ export default {
             "Content-Type": "application/json"
           }
         })
-        .catch(e => _this.$emit("message", e, "danger"))
+        .catch(e => {
+          _this.addMessage({
+            level: "danger",
+            message: e
+          });
+        })
         .then(r => {
           console.log(r.data);
           if (r.data.returnValue && r.data.returnValue !== "") {
@@ -107,21 +120,28 @@ export default {
                 password: client_info[11]
               };
               if (client.password.trim() === sha256(this.password.trim())) {
-                _this.$emit("clientLogin", client);
-                _this.jumpToPage("Previous");
+                _this.setCurrentUser(client);
+                _this.$router.push({
+                  name: "ProductList"
+                });
               } else {
-                _this.$emit("message", "Password does not match.", "danger");
+                _this.addMessage({
+                  level: "danger",
+                  message: "Password does not match."
+                });
               }
             } else {
               // Email not founded in DB
-              _this.$emit(
-                "message",
-                "This Email address does not exist. Please register.",
-                "danger"
-              );
+              _this.addMessage({
+                level: "danger",
+                message: "This Email address does not exist. Please register."
+              });
             }
           } else {
-            _this.$emit("message", r.data.message, "danger");
+            _this.addMessage({
+              level: "danger",
+              message: r.data.message
+            });
           }
           _this.isLoading = false;
         });
