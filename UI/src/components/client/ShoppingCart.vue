@@ -1,6 +1,6 @@
 <template>
   <div class="container table-responsive">
-    <table id="cart" class="table table-hover table-sm">
+    <table id="cart" class="table table-hover">
       <thead>
         <tr>
           <th style="width:50%">Product</th>
@@ -11,7 +11,7 @@
         </tr>
       </thead>
 
-      <transition-group name="list-shopping-cart" tag="tbody">
+      <transition-group tag="tbody">
         <CartItem v-for="cartItem in shoppingCart" :cartItem="cartItem" :key="cartItem.pid" />
       </transition-group>
 
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 import CartItem from "./CartItem.vue";
 export default {
@@ -50,97 +51,22 @@ export default {
     CartItem
   },
   computed: {
-    ...mapGetters(["shoppingCart", "productList", "currentUser", "cartValue"])
+    ...mapGetters([
+      "shoppingCart",
+      "productList",
+      "currentUser",
+      "cartValue",
+      "currentDate"
+    ])
   },
   methods: {
-    ...mapActions(["addMessage"]),
-    checkValidCart(itemList, prodList) {
-      let isValid = true;
-      let message = "";
-
-      itemList.map(item => {
-        for (let prodIdx = 0; prodIdx < prodList.length; prodIdx++) {
-          if (prodList[prodIdx].id == item.id) {
-            if (prodList[prodIdx].quantity < item.quantity) {
-              message = `Only ${prodList[prodIdx].quantity} ${item.title} available in stock`;
-              isValid = false;
-              return;
-            }
-            break;
-          }
-        }
-      });
-      return {
-        isValid,
-        message
-      };
-    },
-    saveShoppingCartLocal() {
-      if (this.isLoggedIn) {
-        let { isValid, message } = this.checkValidCart(
-          this.cartItemList,
-          this.products
-        );
-
-        if (isValid) {
-          this.saveShoppingCart({
-            cartItemList: this.cartItemList,
-            uid: this.currentUser.uid
-          }).then(() => {
-            this.addMessage({
-              level: "success",
-              message: "Your shopping cart is saved successfully"
-            });
-            this.$router.push("/");
-          });
-        } else {
-          this.addMessage({
-            level: "danger",
-            message: message
-          });
-        }
-      } else {
-        this.addMessage({
-          level: "warning",
-          message: "Please login to save your cart"
-        });
-      }
-    },
+    ...mapActions(["addMessage", "emptyShoppingcart", "loadProductList"]),
     checkout() {
-      if (this.isLoggedIn) {
-        if (!this.cartItemList || this.cartItemList.length == 0) {
-          this.addMessage({
-            level: "warning",
-            message: "Your cart is empty!"
-          });
-          return;
-        }
-        let { isValid, message } = this.checkValidCart(
-          this.cartItemList,
-          this.products
-        );
-
-        if (isValid) {
-          this.saveToTransaction({
-            cartItemList: this.cartItemList,
-            uid: this.currentUser.uid
-          }).then(() => {
-            this.addMessage({
-              level: "success",
-              message: "Your order has been successfully processed!"
-            });
-            this.saveShoppingCart({
-              cartItemList: [],
-              uid: this.currentUser.uid
-            });
-            this.clearCart();
-            this.$router.push("/");
-          });
-        } else {
-          this.addMessage({
-            level: "danger",
-            message: message
-          });
+      if (this.currentUser) {
+        if (this.checkValidCart() === "") {
+          if (this.checkValidInfo() === "") {
+            this.insert_order_online();
+          }
         }
       } else {
         this.addMessage({
@@ -148,30 +74,98 @@ export default {
           message: "Please login to checkout"
         });
       }
-    }
-  },
-  watch: {
-    shoppingCart: function() {
-      console.log("Changed");
+    },
+    checkValidCart() {
+      var message = "";
+      if (
+        Object.entries(this.shoppingCart).length === 0 &&
+        this.shoppingCart.constructor === Object
+      ) {
+        message = "Your cart is empty!";
+        this.addMessage({
+          level: "warning",
+          message: message
+        });
+      } else {
+        for (var pid in this.shoppingCart) {
+          if (
+            this.shoppingCart[pid].amount > this.shoppingCart[pid].item_left
+          ) {
+            message +=
+              "Only " +
+              this.shoppingCart[pid].item_left +
+              " '" +
+              this.shoppingCart[pid].name +
+              "' available in stock; ";
+          }
+        }
+        this.addMessage({
+          level: "danger",
+          message: message
+        });
+      }
+      return message;
+    },
+    checkValidInfo() {
+      return "";
+    },
+    insert_order_online() {
+      var func_argument = "";
+      var tracking_number = Math.floor(Math.random() * 1000000000 + 1);
+      for (var pid in this.shoppingCart) {
+        func_argument +=
+          this.currentUser.cid +
+          "|" +
+          this.shoppingCart[pid].default_wid +
+          "|" +
+          pid +
+          "|" +
+          this.shoppingCart[pid].amount +
+          "|" +
+          this.currentDate +
+          "|" +
+          tracking_number;
+        func_argument += "||";
+      }
+      func_argument = func_argument.substring(0, func_argument.length - 2);
+      var request = {
+        func_name: "insert_order_online",
+        func_argument: func_argument
+      };
+      var _this = this;
+      axios
+        .post("", JSON.stringify(request), {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then(r => {
+          console.log(request);
+          if (r.data.message === "Success") {
+            _this.addMessage({
+              level: "success",
+              message: "Your order has been successfully processed!"
+            });
+            _this.loadProductList();
+            _this.emptyShoppingcart();
+            this.$router.push({
+              name: "MyOrder"
+            });
+          } else {
+            _this.addMessage({
+              level: "danger",
+              message: r.data.message
+            });
+          }
+        })
+        .catch(e => {
+          _this.addMessage({
+            level: "danger",
+            message: e
+          });
+        });
     }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-.list-shopping-cart-leave-active {
-  transition: all 0.4s;
-}
-
-.list-shopping-cart-leave-to {
-  opacity: 0;
-  transform: translateX(50px);
-}
-
-.table-sm {
-  font-size: 0.875rem;
-  /deep/ h4 {
-    font-size: 1.25rem;
-  }
-}
-</style>

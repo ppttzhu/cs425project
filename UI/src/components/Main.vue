@@ -22,9 +22,12 @@ export default {
   },
   mounted() {
     this.loadProductList();
+    if (window.$cookies.isKey("currentUser")) {
+      this.setCurrentUser(window.$cookies.get("currentUser"));
+    }
   },
   methods: {
-    ...mapActions(["loadProductList"])
+    ...mapActions(["loadProductList", "setCurrentUser"])
   }
 };
 </script>

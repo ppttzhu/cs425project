@@ -1,5 +1,6 @@
 import ProductList from "./components/client/ProductList.vue";
 import ShoppingCart from "./components/client/ShoppingCart.vue";
+import MyOrder from "./components/client/MyOrder.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import Statistics from "./components/company/Statistics.vue";
@@ -13,6 +14,7 @@ export const routes = [
   { path: "/login", component: Login, name: "Login" },
   { path: "/register", component: Register, name: "Register" },
   { path: "/shoppingcart", component: ShoppingCart, name: "ShoppingCart" },
+  { path: "/myorder", component: MyOrder, name: "MyOrder" },
   { path: "/statistics", component: Statistics, name: "Statistics" },
   { path: "/replenish-store", component: ReplenishStore, name: "ReplenishStore" },
   { path: "/replenish-warehouse", component: ReplenishWarehouse, name: "ReplenishWarehouse" },

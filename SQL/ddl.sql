@@ -218,16 +218,21 @@ CREATE OR REPLACE VIEW product_summary AS
         FROM order_online
         GROUP BY pid
     ),
-    storage AS (
-        SELECT pid, sum(amount) as item_left
+    max_storage AS (
+        SELECT pid, max(amount) as item_left
         FROM keep_warehouse
         GROUP BY pid
+    ),
+    storage AS (
+        SELECT DISTINCT ON (pid) pid, wid as default_wid, item_left
+        FROM keep_warehouse
+        NATURAL JOIN max_storage
     ),
     image AS (
         SELECT DISTINCT ON (pid) pid, image_url
         FROM product_images
     )
-    SELECT product.pid, name, price, image_url, client_rating, item_left
+    SELECT product.pid, name, price, image_url, client_rating, item_left, default_wid
     FROM (
         product
         LEFT OUTER JOIN ratings

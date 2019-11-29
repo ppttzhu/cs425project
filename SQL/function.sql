@@ -115,6 +115,12 @@ BEGIN
         NULL,
         NULL
     ) RETURNING oid INTO ret;
+
+    UPDATE keep_warehouse
+    SET amount = keep_warehouse.amount - insert_order_online.amount
+    WHERE keep_warehouse.wid = insert_order_online.wid
+    AND keep_warehouse.pid = insert_order_online.pid;
+
     RETURN ret;
 END;
 $$ 
@@ -392,5 +398,26 @@ $$
         ON client.aid = address.aid
         LEFT OUTER JOIN region
         ON address.zip = region.zip;
+$$ 
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION select_order_online (
+    cid INT
+) RETURNS TABLE (
+    oid INT,
+    cid INT,
+    wid INT,
+    pid INT,
+    amount INT,
+    date DATE,
+    tracking_number VARCHAR(50),
+    rating INT,
+    review TEXT
+) AS 
+$$ 
+    SELECT oid, cid, wid, pid, amount, date, tracking_number, rating, review
+    FROM order_online
+    WHERE order_online.cid = select_order_online.cid
+    ORDER BY oid DESC;
 $$ 
 LANGUAGE SQL;

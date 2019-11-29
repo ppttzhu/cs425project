@@ -47,7 +47,6 @@ export default {
     ...mapActions(["addToChart"]),
     amountChanged() {
       this.cartItem.amount = this.amount;
-      console.log(this.amount);
       this.addToChart(this.cartItem);
     },
     removeItem() {

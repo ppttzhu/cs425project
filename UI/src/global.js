@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const state = {
-  productList: null,
+  productList: {},
   messageGroup: {
     level: "",
     message: "",
@@ -35,6 +35,13 @@ const getters = {
   },
   shoppingCart: state => {
     return state.shoppingCart;
+  },
+  currentDate() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+    return yyyy + "-" + mm + "-" + dd;
   }
 };
 
@@ -71,7 +78,7 @@ const mutations = {
           // parse response
           var plist = r.data.returnValue.split("\n");
           var columns = plist[0].split("|");
-          var ret = [];
+          var ret = {};
           for (var i = 1; i < plist.length; i++) {
             if (plist[i] && plist[i] !== "") {
               var onep = {};
@@ -79,11 +86,10 @@ const mutations = {
               for (var j = 0; j < columns.length; j++) {
                 onep[columns[j]] = onepstring[j];
               }
-              onep["item_left"] = 1; //TODO
               onep["price"] = parseFloat(
                 onep["price"].substring(1, onep["price"].length)
-              );
-              ret.push(onep);
+              ); // Skip first $
+              ret[onep["pid"]] = onep;
             }
           }
           state.productList = ret;
@@ -106,10 +112,12 @@ const mutations = {
   },
   SET_CURRENT_USER(state, user) {
     state.currentUser = user;
+    window.$cookies.set("currentUser", user);
   },
   REMOVE_CURRENT_USER(state) {
     state.currentUser = null;
     state.shoppingCart = null;
+    window.$cookies.remove("currentUser");
   },
   ADD_TO_CART(state, product) {
     if (product.amount === 0) {
@@ -126,6 +134,9 @@ const mutations = {
     }
     state.numItems = numItems_;
     state.cartValue = cartValue_;
+  },
+  EMPTY_CART(state) {
+    state.shoppingCart = {};
   }
 };
 
@@ -148,6 +159,9 @@ const actions = {
   },
   addToChart({ commit }, product) {
     commit("ADD_TO_CART", product);
+  },
+  emptyShoppingcart({ commit }) {
+    commit("EMPTY_CART");
   }
 };
 

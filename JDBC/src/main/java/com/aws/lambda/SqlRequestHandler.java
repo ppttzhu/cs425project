@@ -44,6 +44,7 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
             put("filter_by_category", Arrays.asList("char"));
             put("product_summary", new ArrayList<String>());
             put("select_online_client", Arrays.asList("char"));
+            put("select_order_online", Arrays.asList("int"));
         }
     };
 
@@ -73,8 +74,10 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
             }
             init += ")";
         }
-        PreparedStatement ps = prepareQuery(connection, init, types, func_argument);
-        executeStatement(ps, responseDetails);
+        for (String arg : Arrays.asList(func_argument.split("\\|\\|"))) {
+            PreparedStatement ps = prepareQuery(connection, init, types, arg);
+            executeStatement(ps, responseDetails);
+        }
     }
 
     private PreparedStatement prepareQuery(Connection connection, String init, List<String> types, String func_argument)

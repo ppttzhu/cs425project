@@ -37,6 +37,7 @@ SELECT insert_online_client('Travis','Wilson','natalieortiz@hotmail.com','MY-MAS
 SELECT insert_online_client('Brittany','Padilla','sanchezjessica@yahoo.com','MY-MASKED-PASSWORD');
 SELECT insert_online_client('Sarah','Zamora','qjohnson@yahoo.com','MY-MASKED-PASSWORD');
 SELECT insert_online_client('Kathy','Mendez','davidmatthews@bailey-gordon.com','MY-MASKED-PASSWORD');
+SELECT insert_online_client('first_name_test','last_name_test','test@gmail.com','bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a');
 --=====================Update Fake Pay=====================
 SELECT update_online_client_pay(2,'075-361-1225x57681','4167460543864','5534500682702280','623 James Shoals','95945');
 SELECT update_online_client_pay(3,'(630)138-6073','3589431294836200','501832415316','0833 Jones Knolls','06040');
@@ -69,7 +70,6 @@ SELECT insert_contract(3,244,14,12);
 SELECT insert_contract(4,237,2,13);
 SELECT insert_contract(4,319,11,10);
 SELECT insert_contract(5,140,4,5);
-SELECT insert_contract(5,351,19,28);
 SELECT insert_contract(5,338,7,22);
 SELECT insert_contract(5,238,15,2);
 SELECT insert_contract(5,300,8,13);
