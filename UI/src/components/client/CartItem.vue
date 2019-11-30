@@ -32,12 +32,8 @@
 
 <script>
 import { mapActions } from "vuex";
-import { BFormInput } from "bootstrap-vue";
 export default {
   props: ["cartItem"],
-  components: {
-    "b-form-input": BFormInput
-  },
   data() {
     return {
       amount: this.cartItem.amount

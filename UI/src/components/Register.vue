@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-6 offset-md-3 col-sm-10 offset-sm-1">
       <form id="register-form" role="form">
-        <h3 class="text-center">Register</h3>
+        <h3 class="text-center" style="padding-bottom:25px;">Register</h3>
         <div class="form-group">
           <b-form-input
             type="email"
@@ -65,15 +65,10 @@
 
 <script>
 import axios from "axios";
-import { BFormInput, BSpinner } from "bootstrap-vue";
 import { sha256 } from "js-sha256";
 import { mapActions } from "vuex";
 
 export default {
-  components: {
-    "b-form-input": BFormInput,
-    "b-spinner": BSpinner
-  },
   data() {
     return {
       email: "",
@@ -179,7 +174,7 @@ export default {
           } else {
             _this.addMessage({
               level: "danger",
-              message: r.data.message
+              message: r.data
             });
           }
           _this.isLoading = false;

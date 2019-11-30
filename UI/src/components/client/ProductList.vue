@@ -16,13 +16,11 @@
 
 <script>
 import ProductItem from "../ProductItem.vue";
-import { BSpinner } from "bootstrap-vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
     ProductItem,
-    "b-spinner": BSpinner
   },
   data() {
     return {

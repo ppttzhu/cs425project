@@ -125,7 +125,7 @@ export default {
           this.currentDate +
           "|" +
           tracking_number;
-        func_argument += "||";
+        func_argument += "\n";
       }
       func_argument = func_argument.substring(0, func_argument.length - 2);
       var request = {
@@ -154,7 +154,7 @@ export default {
           } else {
             _this.addMessage({
               level: "danger",
-              message: r.data.message
+              message: r.data
             });
           }
         })

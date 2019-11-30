@@ -18,7 +18,7 @@
       <td class="actions text-center" data-th>
         <button class="btn btn-sm" @click="writeReview">
           <font-awesome-icon icon="pencil-alt" v-if="!orderItem.rating"></font-awesome-icon>
-          <font-awesome-icon icon="eye" v-if="orderItem.rating"></font-awesome-icon>
+          <font-awesome-icon icon="eye" v-else></font-awesome-icon>
         </button>
       </td>
     </tr>
@@ -43,13 +43,11 @@
 <script>
 import axios from "axios";
 import { mapActions } from "vuex";
-import { BFormInput } from "bootstrap-vue";
 import StarRating from "vue-star-rating";
 
 export default {
   props: ["orderItem"],
   components: {
-    "b-form-input": BFormInput,
     "star-rating": StarRating
   },
   data() {
@@ -89,7 +87,7 @@ export default {
           } else {
             _this.addMessage({
               level: "danger",
-              message: r.data.message
+              message: r.data
             });
           }
         })

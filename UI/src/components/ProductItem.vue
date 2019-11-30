@@ -29,26 +29,12 @@
 </template>
 
 <script>
-import {
-  BInputGroup,
-  BInputGroupAppend,
-  BInputGroupPrepend,
-  BButton,
-  BFormInput
-} from "bootstrap-vue";
 export default {
   props: ["item"],
   data() {
     return {
       amount: 0
     };
-  },
-  components: {
-    "b-input-group": BInputGroup,
-    "b-input-group-append": BInputGroupAppend,
-    "b-input-group-prepend": BInputGroupPrepend,
-    "b-button": BButton,
-    "b-form-input": BFormInput
   },
   methods: {
     amountChanged() {

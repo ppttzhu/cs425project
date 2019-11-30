@@ -27,7 +27,6 @@ import { mapActions, mapGetters } from "vuex";
 import OrderItem from "./OrderItem.vue";
 
 export default {
-  name: "MyOrder",
   components: {
     OrderItem
   },
@@ -70,7 +69,7 @@ export default {
           } else {
             _this.addMessage({
               level: "danger",
-              message: r.data.message
+              message: r.data
             });
           }
         })

@@ -59,7 +59,7 @@ const mutations = {
         level: "",
         message: ""
       };
-    }, 5000); //5s
+    }, 10000); //10s
   },
   LOAD_PRODUCT_LIST(state, pstring) {
     var request = {
@@ -96,7 +96,7 @@ const mutations = {
         } else {
           addMessage({
             level: "danger",
-            message: r.data.message
+            message: r.data
           });
         }
       })

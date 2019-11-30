@@ -15,7 +15,6 @@ import Header from "./Header.vue";
 import Message from "./Message.vue";
 
 export default {
-  name: "Main",
   components: {
     Header,
     Message

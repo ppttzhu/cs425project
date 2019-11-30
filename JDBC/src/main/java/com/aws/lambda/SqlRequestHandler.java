@@ -74,7 +74,7 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
             }
             init += ")";
         }
-        for (String arg : Arrays.asList(func_argument.split("\\|\\|"))) {
+        for (String arg : Arrays.asList(func_argument.split("\n"))) {
             PreparedStatement ps = prepareQuery(connection, init, types, arg);
             executeStatement(ps, responseDetails);
         }

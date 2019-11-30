@@ -25,7 +25,13 @@
             <a class="nav-link">Login</a>
           </router-link>
           <li v-if="currentUser !== null" class="li-pointer nav-item">
-            <a @click="logoutUser" class="nav-link">Logout {{ currentUser.firstName }}</a>
+            <router-link to="/account" class="nav-link">Account</router-link>
+          </li>
+          <li v-if="currentUser !== null" class="li-pointer nav-item">
+            <router-link to="/myorder" class="nav-link">Orders</router-link>
+          </li>
+          <li v-if="currentUser !== null" class="li-pointer nav-item">
+            <a @click="logoutUser" class="nav-link">Logout</a>
           </li>
           <li v-if="isAdmin" class="li-pointer nav-item">
             <a @click="logoutAdmin" class="nav-link">Logout admin</a>

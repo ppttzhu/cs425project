@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-6 offset-md-3 col-sm-12 offset-sm-1">
       <form id="login-form" role="form" style="display: block;">
-        <h3 class="text-center">Login</h3>
+        <h3 class="text-center" style="padding-bottom:25px;">Login</h3>
         <div class="form-group">
           <input
             type="email"
@@ -55,14 +55,10 @@
 
 <script>
 import axios from "axios";
-import { BSpinner } from "bootstrap-vue";
 import { sha256 } from "js-sha256";
 import { mapActions } from "vuex";
 
 export default {
-  components: {
-    "b-spinner": BSpinner
-  },
   data() {
     return {
       email: "",
@@ -110,13 +106,13 @@ export default {
                 firstName: client_info[1],
                 lastName: client_info[2],
                 email: client_info[3],
-                phoneNumber: client_info[4],
-                street: client_info[5],
-                zip: client_info[6],
-                city: client_info[7],
-                state: client_info[8],
-                cardNumber: client_info[9],
-                accountNumber: client_info[10],
+                phoneNumber: (client_info[4] === 'null') ? null : client_info[4],
+                street: (client_info[5] === 'null') ? null : client_info[5],
+                zip: (client_info[6] === 'null') ? null : client_info[6],
+                city: (client_info[7] === 'null') ? null : client_info[7],
+                state: (client_info[8] === 'null') ? null : client_info[8],
+                cardNumber: (client_info[9] === 'null') ? null : client_info[9],
+                accountNumber: (client_info[10] === 'null') ? null : client_info[10],
                 password: client_info[11]
               };
               if (client.password.trim() === sha256(this.password.trim())) {
@@ -140,7 +136,7 @@ export default {
           } else {
             _this.addMessage({
               level: "danger",
-              message: r.data.message
+              message: r.data
             });
           }
           _this.isLoading = false;
