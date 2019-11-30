@@ -64,14 +64,19 @@ export default {
     checkout() {
       if (this.currentUser) {
         if (this.checkValidCart() === "") {
-          if (this.checkValidInfo() === "") {
+          if (this.checkValidInfo()) {
             this.insert_order_online();
+          } else {
+            this.addMessage({
+              level: "warning",
+              message: "Please complete your payment information to checkout!"
+            });
           }
         }
       } else {
         this.addMessage({
           level: "warning",
-          message: "Please login to checkout"
+          message: "Please login to checkout!"
         });
       }
     },
@@ -107,7 +112,19 @@ export default {
       return message;
     },
     checkValidInfo() {
-      return "";
+      if (
+        this.currentUser.phoneNumber &&
+        this.currentUser.street &&
+        this.currentUser.zip &&
+        this.currentUser.cardNumber &&
+        this.currentUser.phoneNumber !== "" &&
+        this.currentUser.street !== "" &&
+        this.currentUser.zip !== "" &&
+        this.currentUser.cardNumber !== ""
+      ) {
+        return true;
+      }
+      return false;
     },
     insert_order_online() {
       var func_argument = "";

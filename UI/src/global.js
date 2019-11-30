@@ -116,7 +116,7 @@ const mutations = {
   },
   REMOVE_CURRENT_USER(state) {
     state.currentUser = null;
-    state.shoppingCart = null;
+    state.shoppingCart = {};
     window.$cookies.remove("currentUser");
   },
   ADD_TO_CART(state, product) {
