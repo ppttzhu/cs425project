@@ -169,6 +169,14 @@ SELECT insert_order_online(7, 1, 3, 1, '2019-11-15', 'tracking_number');
 SELECT insert_order_online(8, 1, 2, 1, '2019-11-8', 'tracking_number');
 SELECT insert_order_online(9, 1, 4, 2, '2019-7-13', 'tracking_number');
 SELECT insert_order_online(10, 1, 2, 1, '2019-11-13', 'tracking_number');
+SELECT insert_order_online(10, 2, 2, 1, '2019-11-13', 'tracking_number');
+SELECT insert_order_online(7, 2, 3, 1, '2018-11-15', 'tracking_number');
+SELECT insert_order_online(8, 3, 2, 1, '2018-11-8', 'tracking_number');
+SELECT insert_order_online(9, 2, 4, 2, '2018-7-13', 'tracking_number');
+SELECT insert_order_online(10, 4, 2, 1, '2018-11-13', 'tracking_number');
+SELECT insert_order_online(2, 5, 5, 1, '2019-8-15', 'tracking_number');
+SELECT insert_order_online(2, 5, 4, 1, '2019-11-22', 'tracking_number');
+SELECT insert_order_online(3, 5, 2, 1, '2019-5-22', 'tracking_number');
 
 
 
