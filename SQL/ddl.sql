@@ -244,3 +244,61 @@ CREATE OR REPLACE VIEW product_summary AS
         )
     ORDER BY product.pid;
 
+CREATE OR REPLACE VIEW product_total_sales AS
+    WITH product_total AS(
+        SELECT pid, COUNT(amount) as amount
+        FROM order_online
+        GROUP BY pid
+    )
+    SELECT pid, amount, price, (amount*price) as total_price
+        FROM product_total NATURAL JOIN product
+        ORDER BY total_price DESC, price DESC;
+
+CREATE OR REPLACE VIEW category_total_sales AS
+    SELECT category, SUM(total_price) AS total_price
+        FROM product_total_sales NATURAL JOIN product_categories
+        GROUP BY category
+        ORDER BY total_price DESC;
+
+CREATE OR REPLACE VIEW customer_consume_report AS
+    WITH customer_buy AS(
+        SELECT cid, pid, COUNT(amount) as c
+        FROM order_online
+        GROUP BY cid, pid
+        ),
+        expendamount_pid AS(
+        SELECT cid, pid, c, price, (price*c) as expendamount_p
+        FROM customer_buy NATURAL JOIN product
+        )
+    SELECT cid, SUM(expendamount_p) as expendamount
+    FROM expendamount_pid
+    GROUP BY cid
+    ORDER BY expendamount DESC;
+
+CREATE OR REPLACE VIEW sales_monthly_report AS
+    WITH sales_report AS(
+        SELECT EXTRACT(year from date) as yr,
+        EXTRACT(month from date) as mon,
+        pid, 
+        COUNT(amount) as sales_number
+        FROM order_online
+        GROUP BY EXTRACT(year from date),
+        EXTRACT(month from date), 
+        pid
+        ORDER BY yr DESC, mon DESC, pid ASC
+    )   
+    SELECT yr, mon, pid, sales_number, price, (price * sales_number) as sales_total
+        FROM sales_report NATURAL JOIN product;
+
+CREATE OR REPLACE VIEW sales_year_report AS
+    WITH sales_report AS(
+        SELECT EXTRACT(year from date) as yr,
+        pid, 
+        COUNT(amount) as sales_number
+        FROM order_online
+        GROUP BY EXTRACT(year from date), pid
+        ORDER BY yr DESC, pid ASC
+    )   
+    SELECT yr, pid, sales_number, price, (price * sales_number) as sales_total
+        FROM sales_report NATURAL JOIN product;
+
