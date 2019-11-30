@@ -302,3 +302,21 @@ CREATE OR REPLACE VIEW sales_year_report AS
     SELECT yr, pid, sales_number, price, (price * sales_number) as sales_total
         FROM sales_report NATURAL JOIN product;
 
+CREATE OR REPLACE VIEW region_total_sales AS
+    WITH wid_total AS(
+        SELECT wid, SUM(amount) as amount_wid
+        FROM order_online
+        GROUP BY wid
+        ),
+        aid_total AS(
+        SELECT aid, amount_wid
+        FROM wid_total NATURAL JOIN warehouse
+        ),
+        zip_total AS(
+        SELECT zip, SUM(amount_wid) as amount_zip
+        FROM aid_total NATURAL JOIN address
+        GROUP BY zip
+        )
+    SELECT zip, city, state_id, amount_zip as total_sales
+    FROM zip_total NATURAL JOIN region
+    ORDER BY total_sales DESC;
