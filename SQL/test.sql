@@ -37,7 +37,6 @@ SELECT insert_online_client('Travis','Wilson','natalieortiz@hotmail.com','MY-MAS
 SELECT insert_online_client('Brittany','Padilla','sanchezjessica@yahoo.com','MY-MASKED-PASSWORD');
 SELECT insert_online_client('Sarah','Zamora','qjohnson@yahoo.com','MY-MASKED-PASSWORD');
 SELECT insert_online_client('Kathy','Mendez','davidmatthews@bailey-gordon.com','MY-MASKED-PASSWORD');
-SELECT insert_online_client('first_name_test','last_name_test','test@gmail.com','bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a');
 --=====================Update Fake Pay=====================
 SELECT update_online_client_pay(2,'075-361-1225x57681','4167460543864','5534500682702280','623 James Shoals','95945');
 SELECT update_online_client_pay(3,'(630)138-6073','3589431294836200','501832415316','0833 Jones Knolls','06040');
@@ -70,6 +69,7 @@ SELECT insert_contract(3,244,14,12);
 SELECT insert_contract(4,237,2,13);
 SELECT insert_contract(4,319,11,10);
 SELECT insert_contract(5,140,4,5);
+SELECT insert_contract(5,351,19,28);
 SELECT insert_contract(5,338,7,22);
 SELECT insert_contract(5,238,15,2);
 SELECT insert_contract(5,300,8,13);
@@ -133,3 +133,44 @@ SELECT insert_contract(21,97,17,13);
 SELECT insert_contract(21,274,9,10);
 SELECT insert_contract(21,99,20,3);
 SELECT insert_contract(21,65,19,5);
+--=====================Insert Fake order_online=====================
+SELECT insert_order_online(3, 1, 6, 3, '2018-5-12', 'tracking_number');
+SELECT insert_order_online(3, 1, 5, 1, '2018-6-17', 'tracking_number');
+SELECT insert_order_online(4, 1, 2, 1, '2018-11-13', 'tracking_number');
+SELECT insert_order_online(5, 1, 2, 1, '2018-11-12', 'tracking_number');
+SELECT insert_order_online(6, 1, 2, 3, '2018-11-27', 'tracking_number');
+SELECT insert_order_online(6, 1, 2, 3, '2018-10-19', 'tracking_number');
+SELECT insert_order_online(7, 1, 3, 1, '2018-11-15', 'tracking_number');
+SELECT insert_order_online(8, 1, 2, 1, '2018-11-8', 'tracking_number');
+SELECT insert_order_online(9, 1, 4, 2, '2018-7-13', 'tracking_number');
+SELECT insert_order_online(10, 1, 2, 1, '2018-11-13', 'tracking_number');
+SELECT insert_order_online(1, 1, 2, 2, '2018-8-01', 'tracking_number');
+SELECT insert_order_online(1, 1, 2, 1, '2018-9-02', 'tracking_number');
+SELECT insert_order_online(1, 1, 3, 3, '2018-10-03', 'tracking_number');
+SELECT insert_order_online(1, 1, 3, 3, '2018-11-03', 'tracking_number');
+SELECT insert_order_online(1, 1, 2, 2, '2019-8-01', 'tracking_number');
+SELECT insert_order_online(1, 1, 2, 1, '2019-9-02', 'tracking_number');
+SELECT insert_order_online(1, 1, 3, 3, '2019-10-03', 'tracking_number');
+SELECT insert_order_online(1, 1, 3, 3, '2019-11-03', 'tracking_number');
+SELECT insert_order_online(2, 1, 4, 1, '2019-1-03', 'tracking_number');
+SELECT insert_order_online(2, 1, 5, 1, '2019-1-04', 'tracking_number');
+SELECT insert_order_online(2, 1, 7, 1, '2019-1-03', 'tracking_number');
+SELECT insert_order_online(2, 1, 4, 1, '2019-8-23', 'tracking_number');
+SELECT insert_order_online(2, 1, 5, 1, '2019-8-15', 'tracking_number');
+SELECT insert_order_online(2, 1, 4, 1, '2019-11-22', 'tracking_number');
+SELECT insert_order_online(3, 1, 2, 1, '2019-5-22', 'tracking_number');
+SELECT insert_order_online(3, 1, 6, 3, '2019-5-12', 'tracking_number');
+SELECT insert_order_online(3, 1, 5, 1, '2019-6-17', 'tracking_number');
+SELECT insert_order_online(4, 1, 2, 1, '2019-11-13', 'tracking_number');
+SELECT insert_order_online(5, 1, 2, 1, '2019-11-12', 'tracking_number');
+SELECT insert_order_online(6, 1, 2, 3, '2019-11-27', 'tracking_number');
+SELECT insert_order_online(6, 1, 2, 3, '2019-10-19', 'tracking_number');
+SELECT insert_order_online(7, 1, 3, 1, '2019-11-15', 'tracking_number');
+SELECT insert_order_online(8, 1, 2, 1, '2019-11-8', 'tracking_number');
+SELECT insert_order_online(9, 1, 4, 2, '2019-7-13', 'tracking_number');
+SELECT insert_order_online(10, 1, 2, 1, '2019-11-13', 'tracking_number');
+
+
+
+
+
