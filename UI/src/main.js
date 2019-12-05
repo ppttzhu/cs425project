@@ -18,6 +18,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
+  BTable,
   BFormInput,
   BInputGroup,
   BInputGroupAppend,
@@ -32,6 +33,7 @@ import "./assets/styles/app.scss";
 
 library.add(faTrash, faPencilAlt, faEye, faCheck, faTimes);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component("b-table", BTable);
 Vue.component("b-form-input", BFormInput);
 Vue.component("b-input-group", BInputGroup);
 Vue.component("b-input-group-append", BInputGroupAppend);

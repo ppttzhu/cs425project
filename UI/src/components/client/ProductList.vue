@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :class="{loadingItem: !productList}">
+  <div :class="{loadingItem: !productList}">
     <div class="row text-center" v-if="!productList">
       <b-spinner variant="success" style="width: 3rem; height: 3rem;" label="Large Spinner"></b-spinner>
     </div>

@@ -10,7 +10,6 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import axios from "axios";
 import Header from "./Header.vue";
 import Message from "./Message.vue";
 

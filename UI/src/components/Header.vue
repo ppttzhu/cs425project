@@ -1,8 +1,11 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark" role="navigation">
     <div class="container">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" v-if="!isAdmin">
         <router-link to="/" class="navbar-brand mr-auto">Online Store</router-link>
+      </ul>
+      <ul class="nav navbar-nav" v-if="isAdmin">
+        <span class="navbar-brand mr-auto">Online Store Management</span>
       </ul>
       <!-- Brand and toggle get grouped for better mobile display -->
       <button
@@ -36,7 +39,7 @@
           <li v-if="isAdmin" class="li-pointer nav-item">
             <a @click="logoutAdmin" class="nav-link">Logout admin</a>
           </li>
-          <li>
+          <li v-if="!isAdmin">
             <router-link to="/shoppingcart" class="btn btn-success navbar-btn" tag="button">
               Checkout
               <span class="badge badge-light">{{ numItems }} ($ {{ cartValue.toFixed(2) }})</span>
@@ -71,6 +74,7 @@ export default {
     },
     logoutAdmin() {
       this.setAdmin(false);
+      this.removeCurrentUser();
       this.$router.push({
         name: "ProductList"
       });

@@ -78,7 +78,7 @@ export default {
       if (this.email === "admin" && this.password === "admin") {
         this.setAdmin(true);
         this.$router.push({
-          name: "Statistics"
+          name: "Admin"
         });
         return;
       }

@@ -4,11 +4,7 @@ import MyOrder from "./components/client/MyOrder.vue";
 import Account from "./components/client/Account.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
-import Statistics from "./components/company/Statistics.vue";
-import ReplenishStore from "./components/company/ReplenishStore.vue";
-import ReplenishWarehouse from "./components/company/ReplenishWarehouse.vue";
-import Warehouse from "./components/company/Warehouse.vue";
-import Store from "./components/company/Store.vue";
+import Admin from "./components/company/Admin.vue";
 
 export const routes = [
   { path: "/", component: ProductList, name: "ProductList" },
@@ -17,10 +13,6 @@ export const routes = [
   { path: "/shoppingcart", component: ShoppingCart, name: "ShoppingCart" },
   { path: "/myorder", component: MyOrder, name: "MyOrder" },
   { path: "/account", component: Account, name: "Account" },
-  { path: "/statistics", component: Statistics, name: "Statistics" },
-  { path: "/replenish-store", component: ReplenishStore, name: "ReplenishStore" },
-  { path: "/replenish-warehouse", component: ReplenishWarehouse, name: "ReplenishWarehouse" },
-  { path: "/warehouse", component: Warehouse, name: "Warehouse" },
-  { path: "/store", component: Store, name: "Store" },
+  { path: "/admin", component: Admin, name: "Admin" },
   { path: "*", redirect: "/" }
 ];

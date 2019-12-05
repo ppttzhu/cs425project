@@ -34,17 +34,23 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
             put("update_online_client_password", Arrays.asList("int", "char"));
             put("update_online_client_pay", Arrays.asList("int", "char", "char", "char", "char", "char"));
             put("update_contract", Arrays.asList("int", "int", "int", "int"));
-            put("update_keep_warehouse", Arrays.asList("int", "int", "int"));
-            put("update_keep_store", Arrays.asList("int", "int", "int"));
-            put("confirm_replenish_m2w", Arrays.asList("int"));
-            put("confirm_replenish_w2s", Arrays.asList("int"));
             put("review_order", Arrays.asList("int", "int", "char"));
-            // ===========================Query===========================
+            // ===========================View===========================
+            put("store", new ArrayList<String>());
+            put("warehouse", new ArrayList<String>());
             put("region", new ArrayList<String>());
-            put("filter_by_category", Arrays.asList("char"));
             put("product_summary", new ArrayList<String>());
+            put("product_total_sales", new ArrayList<String>());
+            put("category_total_sales", new ArrayList<String>());
+            put("customer_consume_report", new ArrayList<String>());
+            put("sales_monthly_report", new ArrayList<String>());
+            put("sales_year_report", new ArrayList<String>());
+            // ===========================Query===========================
+            put("filter_by_category", Arrays.asList("char"));
             put("select_online_client", Arrays.asList("char"));
             put("select_order_online", Arrays.asList("int"));
+            put("select_keep_warehouse", Arrays.asList("int"));
+            put("select_keep_store", Arrays.asList("int"));
         }
     };
 
