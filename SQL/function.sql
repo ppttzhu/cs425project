@@ -431,3 +431,22 @@ $$
     WHERE keep_store.sid = select_keep_store.sid;
 $$ 
 LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_current_month_report (
+    yer FLOAT,
+    mon FLOAT
+) RETURNS TABLE (
+    Year FLOAT,
+    Month FLOAT,
+    Product_ID INT,
+    Unit_price MONEY,
+    Sales BIGINT,
+    Sales_amount MONEY
+) AS 
+$$ 
+    SELECT Year, Month, Product_ID, Unit_price, Sales, Sales_amount
+    FROM sales_monthly_report
+    WHERE sales_monthly_report.Month = get_current_month_report.mon
+    AND sales_monthly_report.Year = get_current_month_report.yer;
+$$ 
+LANGUAGE SQL;

@@ -297,7 +297,7 @@ CREATE OR REPLACE VIEW sales_monthly_report AS
         pid
         ORDER BY yr DESC, mon DESC, pid ASC
     )   
-    SELECT yr, mon, pid, sales_number, price, (price * sales_number) as sales_total
+    SELECT yr AS Year, mon AS Month, pid AS Product_ID, price as Unit_price, sales_number AS Sales, (price * sales_number) as Sales_amount
         FROM sales_report NATURAL JOIN product;
 
 CREATE OR REPLACE VIEW sales_year_report AS
@@ -309,7 +309,7 @@ CREATE OR REPLACE VIEW sales_year_report AS
         GROUP BY EXTRACT(year from date), pid
         ORDER BY yr DESC, pid ASC
     )   
-    SELECT yr, pid, sales_number, price, (price * sales_number) as sales_total
+    SELECT yr AS Year, pid AS Product_ID, price as Unit_price, sales_number AS Sales, (price * sales_number) as Sales_amount
         FROM sales_report NATURAL JOIN product;
 
 CREATE OR REPLACE VIEW region_total_sales AS
@@ -337,6 +337,6 @@ CREATE OR REPLACE VIEW region_total_sales AS
         FROM aid_total NATURAL JOIN address
         GROUP BY zip
         )
-        SELECT zip, city, state_id, amount_zip as amount, total_sales
+        SELECT zip, city, state_id, amount_zip AS amount, total_sales AS Sales_amount
         FROM zip_total NATURAL JOIN region
         ORDER BY total_sales DESC;
