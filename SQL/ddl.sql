@@ -1,4 +1,6 @@
 -- ===========================Clear===========================
+DROP VIEW IF EXISTS region_total_sales;
+
 DROP VIEW IF EXISTS sales_year_report;
 
 DROP VIEW IF EXISTS sales_monthly_report;
