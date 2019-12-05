@@ -84,7 +84,11 @@ const mutations = {
               var onep = {};
               var onepstring = plist[i].split("|");
               for (var j = 0; j < columns.length; j++) {
-                onep[columns[j]] = onepstring[j];
+                if (onepstring[j] === "null") {
+                  onep[columns[j]] = null;
+                } else {
+                  onep[columns[j]] = onepstring[j];
+                }
               }
               onep["price"] = parseFloat(
                 onep["price"].substring(1, onep["price"].length)
@@ -137,6 +141,8 @@ const mutations = {
   },
   EMPTY_CART(state) {
     state.shoppingCart = {};
+    state.numItems = 0;
+    state.cartValue = 0;
   }
 };
 

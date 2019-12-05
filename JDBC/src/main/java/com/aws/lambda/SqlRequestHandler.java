@@ -45,12 +45,14 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
             put("customer_consume_report", new ArrayList<String>());
             put("sales_monthly_report", new ArrayList<String>());
             put("sales_year_report", new ArrayList<String>());
+            put("region_total_sales", new ArrayList<String>());
             // ===========================Query===========================
             put("filter_by_category", Arrays.asList("char"));
             put("select_online_client", Arrays.asList("char"));
             put("select_order_online", Arrays.asList("int"));
             put("select_keep_warehouse", Arrays.asList("int"));
             put("select_keep_store", Arrays.asList("int"));
+            put("get_current_month_report", Arrays.asList("float", "float"));
         }
     };
 

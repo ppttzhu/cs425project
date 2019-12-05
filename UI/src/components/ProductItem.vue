@@ -14,7 +14,19 @@
             v-if="item.storeAmount !== undefined"
           >, {{ item.storeAmount}} left in store</span>
         </h6>
-        <h6 class="card-subtitle mb-2 remain" v-else>{{ item.item_left }} left in stock</h6>
+        <h6
+          class="card-subtitle mb-2 remain"
+          v-if="!isAdmin"
+        >{{ item.item_left ? item.item_left : 0}} left in stock</h6>
+        <h6 class="card-subtitle mb-2 remain" v-if="!isAdmin">
+          <star-rating
+            v-if="rating"
+            v-model="rating"
+            :show-rating="false"
+            :read-only="true"
+            :star-size="24"
+          ></star-rating>
+        </h6>
         <div class="row">
           <div class="col-9 lead">${{ item.price }}</div>
           <div class="additem">
@@ -36,9 +48,13 @@
 
 <script>
 import { mapGetters } from "vuex";
+import StarRating from "vue-star-rating";
 
 export default {
   props: ["item"],
+  components: {
+    "star-rating": StarRating
+  },
   data() {
     return {
       amount: 0
@@ -66,7 +82,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["isAdmin"])
+    ...mapGetters(["isAdmin"]),
+    rating() {
+      if (this.item.client_rating) {
+        return parseInt(this.item.client_rating);
+      } else {
+        return null;
+      }
+    }
   }
 };
 </script>
