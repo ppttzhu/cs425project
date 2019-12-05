@@ -12,8 +12,6 @@ SELECT * FROM update_online_client_pay(1, '312-445-2255', '4345-2456-3333-5556',
 SELECT * FROM update_contract(1, 1, 10, 3);
 SELECT * FROM update_keep_warehouse(1, 1, 100);
 SELECT * FROM update_keep_store(1, 1, 100);
-SELECT * FROM confirm_replenish_m2w(1);
-SELECT * FROM confirm_replenish_w2s(1);
 SELECT * FROM review_order(1, 5, 'It is Perfect!');
 --=====================Insert Fake Client=====================
 SELECT insert_online_client('Madeline','Hernandez','zhanson@hotmail.com','MY-MASKED-PASSWORD');
@@ -69,7 +67,6 @@ SELECT insert_contract(3,244,14,12);
 SELECT insert_contract(4,237,2,13);
 SELECT insert_contract(4,319,11,10);
 SELECT insert_contract(5,140,4,5);
-SELECT insert_contract(5,351,19,28);
 SELECT insert_contract(5,338,7,22);
 SELECT insert_contract(5,238,15,2);
 SELECT insert_contract(5,300,8,13);

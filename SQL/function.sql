@@ -41,56 +41,6 @@ END;
 $$ 
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION insert_replenish_m2w (
-    wid INT,
-    pid INT,
-    amount INT,
-    date DATE 
-) RETURNS INT AS 
-$$ 
-DECLARE ret INT;
-BEGIN 
-    INSERT INTO replenish_m2w
-    VALUES
-    (
-        DEFAULT,
-        wid,
-        pid,
-        amount,
-        DEFAULT,
-        date
-    ) RETURNING rid INTO ret;
-    RETURN ret;
-END;
-$$ 
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION insert_replenish_w2s (
-    wid INT,
-    sid INT,
-    pid INT,
-    amount INT,
-    date DATE 
-) RETURNS INT AS 
-$$ 
-DECLARE ret INT;
-BEGIN 
-    INSERT INTO replenish_w2s
-    VALUES
-    (
-        DEFAULT,
-        wid,
-        sid,
-        pid,
-        amount,
-        DEFAULT,
-        date
-    ) RETURNING rid INTO ret;
-    RETURN ret;
-END;
-$$ 
-LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION insert_order_online (
     cid INT,
     wid INT,
@@ -272,7 +222,7 @@ CREATE OR REPLACE FUNCTION update_keep_warehouse (
 $$ 
 BEGIN 
     UPDATE keep_warehouse
-    SET amount = update_keep_warehouse.amount
+    SET amount = keep_warehouse.amount + update_keep_warehouse.amount
     WHERE keep_warehouse.wid = update_keep_warehouse.wid
     AND keep_warehouse.pid = update_keep_warehouse.pid;
 
@@ -295,7 +245,7 @@ CREATE OR REPLACE FUNCTION update_keep_store (
 $$ 
 BEGIN 
     UPDATE keep_store
-    SET amount = update_keep_store.amount
+    SET amount = keep_store.amount + update_keep_store.amount
     WHERE keep_store.sid = update_keep_store.sid
     AND keep_store.pid = update_keep_store.pid;
 
@@ -310,29 +260,6 @@ END;
 $$ 
 LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION confirm_replenish_m2w (
-    rid INT
-) RETURNS void AS 
-$$ 
-BEGIN 
-    UPDATE replenish_m2w
-    SET is_filled = TRUE
-    WHERE replenish_m2w.rid = confirm_replenish_m2w.rid;
-END;
-$$ 
-LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION confirm_replenish_w2s (
-    rid INT
-) RETURNS void AS 
-$$ 
-BEGIN 
-    UPDATE replenish_w2s
-    SET is_filled = TRUE
-    WHERE replenish_w2s.rid = confirm_replenish_w2s.rid;
-END;
-$$ 
-LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION review_order (
     oid INT,
@@ -345,6 +272,61 @@ BEGIN
     SET rating = review_order.rating,
         review = review_order.review
     WHERE order_online.oid = review_order.oid;
+END;
+$$ 
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insert_replenish_m2w (
+    wid INT,
+    pid INT,
+    amount INT,
+    date DATE 
+) RETURNS INT AS 
+$$ 
+DECLARE ret INT;
+BEGIN 
+    INSERT INTO replenish_m2w
+    VALUES
+    (
+        DEFAULT,
+        wid,
+        pid,
+        amount,
+        date
+    ) RETURNING rid INTO ret;
+
+    PERFORM update_keep_warehouse(wid, pid, amount);
+
+    RETURN ret;
+END;
+$$ 
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION insert_replenish_w2s (
+    wid INT,
+    sid INT,
+    pid INT,
+    amount INT,
+    date DATE 
+) RETURNS INT AS 
+$$ 
+DECLARE ret INT;
+BEGIN 
+    INSERT INTO replenish_w2s
+    VALUES
+    (
+        DEFAULT,
+        wid,
+        sid,
+        pid,
+        amount,
+        date
+    ) RETURNING rid INTO ret;
+
+    PERFORM update_keep_warehouse(wid, pid, -amount);
+    PERFORM update_keep_store(sid, pid, amount);
+
+    RETURN ret;
 END;
 $$ 
 LANGUAGE plpgsql;
@@ -419,5 +401,33 @@ $$
     FROM order_online
     WHERE order_online.cid = select_order_online.cid
     ORDER BY oid DESC;
+$$ 
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION select_keep_warehouse (
+    wid INT
+) RETURNS TABLE (
+    wid INT,
+    pid INT ,
+    amount INT
+) AS 
+$$ 
+    SELECT wid, pid, amount
+    FROM keep_warehouse
+    WHERE keep_warehouse.wid = select_keep_warehouse.wid;
+$$ 
+LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION select_keep_store (
+    sid INT
+) RETURNS TABLE (
+    sid INT,
+    pid INT ,
+    amount INT
+) AS 
+$$ 
+    SELECT sid, pid, amount
+    FROM keep_store
+    WHERE keep_store.sid = select_keep_store.sid;
 $$ 
 LANGUAGE SQL;

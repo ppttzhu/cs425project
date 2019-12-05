@@ -1,4 +1,14 @@
 -- ===========================Clear===========================
+DROP VIEW IF EXISTS sales_year_report;
+
+DROP VIEW IF EXISTS sales_monthly_report;
+
+DROP VIEW IF EXISTS customer_consume_report;
+
+DROP VIEW IF EXISTS category_total_sales;
+
+DROP VIEW IF EXISTS product_total_sales;
+
 DROP VIEW IF EXISTS product_summary;
 
 DROP TABLE IF EXISTS order_store;
@@ -128,7 +138,6 @@ CREATE TABLE replenish_m2w (
     wid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
-    is_filled BOOLEAN NOT NULL DEFAULT FALSE,
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     PRIMARY KEY (rid),
@@ -143,7 +152,6 @@ CREATE TABLE replenish_w2s (
     sid INT,
     pid INT,
     amount INT NOT NULL CHECK (amount > 0),
-    is_filled BOOLEAN NOT NULL DEFAULT FALSE,
     date DATE NOT NULL CHECK (date BETWEEN '1900-01-01'
         AND '2100-01-01'),
     PRIMARY KEY (rid),
