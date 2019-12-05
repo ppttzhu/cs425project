@@ -8,7 +8,13 @@
         <h5 class="card-title">
           <a href="#" @click.prevent="jumpToPage('Register')">{{ item.name }}</a>
         </h5>
-        <h6 class="card-subtitle mb-2 remain">{{ item.item_left }} left in stock</h6>
+        <h6 class="card-subtitle mb-2 remain" v-if="isAdmin">
+          {{ item.warehouseAmount}} left in warehouse
+          <span
+            v-if="item.storeAmount !== undefined"
+          >, {{ item.storeAmount}} left in store</span>
+        </h6>
+        <h6 class="card-subtitle mb-2 remain" v-else>{{ item.item_left }} left in stock</h6>
         <div class="row">
           <div class="col-9 lead">${{ item.price }}</div>
           <div class="additem">
@@ -29,6 +35,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: ["item"],
   data() {
@@ -55,7 +63,10 @@ export default {
         this.amount -= 1;
       }
       this.amountChanged();
-    },
+    }
+  },
+  computed: {
+    ...mapGetters(["isAdmin"])
   }
 };
 </script>

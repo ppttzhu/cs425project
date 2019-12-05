@@ -34,15 +34,16 @@
       ></b-spinner>
       <b-table striped hover :items="tables.product_total_sales"></b-table>
     </div>
-    <div v-else style="color:red;">Page not available</div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
+import mixin from "../../mixin.js";
 
 export default {
+  mixins: [mixin],
   data() {
     return {
       tables: {

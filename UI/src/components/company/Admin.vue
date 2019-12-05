@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div >
+    <div v-if="isAdmin">
       <nav class="navbar navbar-expand-lg navbar-light">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item" :class="{active: currentPage === 'Statistics'}">
@@ -18,7 +18,7 @@
       <Warehouse v-if="currentPage === 'Warehouse'" />
       <Store v-if="currentPage === 'Store'" />
     </div>
-    <div style="color:red;">Page not available</div>
+    <div v-else style="color:red;">Page not available</div>
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
   },
   data() {
     return {
-      currentPage: "Warehouse"
+      currentPage: "Statistics"
     };
   },
   methods: {
