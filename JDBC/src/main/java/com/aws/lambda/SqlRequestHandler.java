@@ -142,12 +142,13 @@ public class SqlRequestHandler implements RequestHandler<RequestDetails, Respons
     }
 
     private Connection getConnection() throws SQLException {
-        String url = "jdbc:postgresql://cs425project.ck5idh9xvvie.us-east-1.rds.amazonaws.com:5432/cs425project";
-        String username = "ppttzhu";
-        String password = "csgogogo";
-//        String url = "jdbc:postgresql:cs425";
-//        String username = "haley";
-//        String password = "haley";
+        String url = "jdbc:postgresql://XXXXXX.XXXXXX.XXXXXX.rds.amazonaws.com:5432/your-project";
+        String username = "your-username";
+        String password = "your-passwprd";
+        // // for local test
+        // String url = "jdbc:postgresql:your-database";
+        // String username = "your-username";
+        // String password = "your-passwprd";
         Connection conn = DriverManager.getConnection(url, username, password);
         return conn;
     }
